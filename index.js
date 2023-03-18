@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer');
 const login = require('./login');
 const { fields } = require('./fields');
+const fs  = require('fs');
 
 const timeout  = 120 * 1000;
 
@@ -33,6 +34,8 @@ async function main() {
         if (!url.includes('home')) {
             await login(page);
         }
+
+        await page.goto('https://twitter.com/hackerhgl/likes', { waitUntil: 'networkidle2',  })
 
         // await page.waitForNetworkIdle('networkidle2');
 
@@ -83,7 +86,14 @@ async function main() {
         console.log('POST DATA')
         console.log(data)
 
+        fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
 
+        const tweets = data.entities.tweets.entities;
+        const tweetIds = Object.keys(tweets);
+        tweetIds.forEach((id) => {
+            const tweet = tweets[id];
+            console.log('TWEET', tweet.text);
+        });
     } catch (error) {
      console.log('error');
      console.log(error);

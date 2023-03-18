@@ -27,4 +27,8 @@ async function loader(page) {
     await page.waitForFunction(() => !document.querySelector(fields.loader));
 }
 
-module.exports = { clickButton, loader };
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+module.exports = { clickButton, loader, sleep };
