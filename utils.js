@@ -1,3 +1,5 @@
+const {fields} = require('./fields');
+
 async function getButtonSafe(button) {
     try {
         const check = await button.$('div span span', { })
@@ -31,4 +33,19 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-module.exports = { clickButton, loader, sleep };
+
+async function getReduxDump(page) {
+    try {
+        const data = await page.evaluate(function () {
+        const root = document.getElementById('react-root')
+        const state = root._reactRootContainer._internalRoot.current.memoizedState.element.props.children.props.store.getState()
+        return state;
+    });
+    return data;   
+    } catch (error) {
+        console.log('Error in getReduxTweetsDump');
+        console.log(error);
+    }
+}
+
+module.exports = { clickButton, loader, sleep, getReduxDump };
