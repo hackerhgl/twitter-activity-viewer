@@ -69,6 +69,7 @@ async function likedTweets(page) {
     } catch (e) {
         console.log("Error in likedTweets");
         console.log(e);
-    }
-    
+    }   
 }
+
+module.exports = { likedTweets };

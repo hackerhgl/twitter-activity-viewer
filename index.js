@@ -1,28 +1,15 @@
 const puppeteer = require('puppeteer');
 const login = require('./login');
-
-async function getReduxTweetsDump(page) {
-    try {
-        const data = await page.evaluate(function () {
-        const root = document.getElementById('react-root')
-        const state = root._reactRootContainer._internalRoot.current.memoizedState.element.props.children.props.store.getState()
-        const tweets = state.entities.tweets.entities;
-        const parsed = Object.values(tweets);
-        return parsed;
-    });
-    return data;   
-    } catch (error) {
-        console.log('Error in getReduxTweetsDump');
-        console.log(error);
-    }
-}
+const { fetchProfile } = require('./fetch_profile');
 
 async function main() {
     try {
         const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'], userDataDir: './twitter', defaultViewport: null });
         // const browser = await puppeteer.launch({ headless: false, timeout, args: ['--no-sandbox'] });
         const page = await browser.newPage();
-        await page.goto('https://twitter.com/login', { waitUntil: 'networkidle2', timeout })
+        page.setDefaultNavigationTimeout(0); 
+        page.setDefaultTimeout(0)
+        await page.goto('https://twitter.com/login', { waitUntil: 'networkidle2' })
         const url = await page.url();
         console.log('URL PRE AUTH');
 
@@ -30,7 +17,7 @@ async function main() {
             await login(page);
         }
 
-
+        await fetchProfile(page, 'MattWallace888');
 
     } catch (error) {
      console.log('error');
