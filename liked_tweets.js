@@ -28,42 +28,41 @@ async function scrollAndWait(page) {
     }
 }
 
-async function getReduxTweetsDump(page) {
+async function getReduxParsedDump(page) {
     try {
         const state = await getReduxDump(page);
-        const tweets = state.entities.tweets.entities;
-        const parsed = Object.values(tweets);
-        return parsed;
+        const tweets = Object.values(state.entities.tweets.entities);
+        const users = state.entities.users.entities;
+        return {tweets, users};
     } catch (error) {
         console.log('Error in getReduxTweetsDump');
         console.log(error);
     }
 }
 
-async function likedTweets(page) {
+async function fetchLikedTweets(page) {
     try {
         await page.goto('https://twitter.com/hackerhgl/likes', { waitUntil: 'networkidle2' })
-        page.setDefaultNavigationTimeout(0); 
-        page.setDefaultTimeout(0)
         await page.waitForSelector(fields.tweet.base)
-   
 
         let tweets = [];
         const repeatAmount = 5;
         let repeated = 0;
 
         while (true) {
-            const data = await getReduxTweetsDump(page);
-            if (data.length === tweets.length && repeated < repeatAmount) {
+            const data = await getReduxParsedDump(page);
+            console.log('while loop | data', data.tweets.length, 'tweets:', tweets.length);
+            if (data.tweets.length === tweets.length && repeated < repeatAmount) {
                 repeated++;
                 continue;
             }
-            if (data.length === tweets.length && repeated >= repeatAmount) {
+            if (data.tweets.length === tweets.length && repeated >= repeatAmount) {
                 break;
             }
             repeated = 0;
-            tweets = [...data];
+            tweets = [...data.tweets];
             await scrollAndWait(page);
+            fs.writeFileSync('users.json', JSON.stringify(data.users, null, 2));
             fs.writeFileSync('data.json', JSON.stringify(tweets, null, 2));
         }
     } catch (e) {
@@ -72,4 +71,4 @@ async function likedTweets(page) {
     }   
 }
 
-module.exports = { likedTweets };
+module.exports = { fetchLikedTweets };

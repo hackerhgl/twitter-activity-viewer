@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const login = require('./login');
-const { fetchProfile } = require('./fetch_profile');
+const { fetchLikedTweets } = require('./liked_tweets');
 
 async function main() {
     try {
@@ -17,10 +17,10 @@ async function main() {
             await login(page);
         }
 
-        await fetchProfile(page, 'MattWallace888');
+        await fetchLikedTweets(page);
 
     } catch (error) {
-     console.log('error');
+     console.log('Error in main');
      console.log(error);
     }
 }

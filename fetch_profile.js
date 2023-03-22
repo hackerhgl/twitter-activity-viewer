@@ -1,5 +1,6 @@
 const { getReduxDump } = require('./utils');
 const { fields } = require('./fields');
+const tweets = require('./data.json');
 
 async function getReduxUsersDump(page) {
     try {
@@ -25,4 +26,20 @@ async function fetchProfile(page, username) {
     }   
 }
 
-module.exports = { fetchProfile };
+async function fetchProfilesFromTweets(page) {
+    try {
+        const profiles = new Set();
+        for (let i = 0; i < tweets.length; i++) {
+            const tweet = tweets[i];
+            const profile = await fetchProfile(page, tweet.user);
+            profiles.push(profile);
+        }
+        return profiles;
+    } catch (e) {
+        console.log("Error in fetchProfilesFromTweets");
+        console.log(e);
+    }
+}
+
+
+module.exports = { fetchProfile, fetchProfilesFromTweets };
