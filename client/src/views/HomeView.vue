@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import index from '../../../tweets_index.json';
-import users from '../../../users.json';
+import index from '../assets/users.json';
 
+console.log(index);
 
-console.log(index)
-console.log(users)
 </script>
 
 <template>
