@@ -12,7 +12,27 @@ function main() {
             }
         });
 
-        fs.writeFileSync('./tweets_index.json', JSON.stringify(index));
+        const array = [];
+
+        Object.keys(index).forEach((key) => {
+            array.push({
+                user: key,
+                count: index[key],
+            });
+        });
+        console.log(array);
+
+        array.sort((a, b) => {
+            if (a.count > b.count) {
+                return -1;
+            }
+            if (a.count < b.count) {
+                return 1;
+            }
+            return 0;
+        });
+
+        fs.writeFileSync('./tweets_index.json', JSON.stringify(array));
     } catch (e) {
         console.log('error in tweets indexing main');
         console.log(e);
