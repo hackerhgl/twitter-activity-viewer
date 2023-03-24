@@ -1,0 +1,1 @@
+https://github.com/vuejs/language-tools/issues/1996
