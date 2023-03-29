@@ -1,5 +1,10 @@
 export type Root = TwitterUser[]
 
+export interface TwitterUserIndex {
+  user: string;
+  count?: number;
+}
+
 export interface TwitterUser {
   can_dm?: boolean
   can_media_tag?: boolean
