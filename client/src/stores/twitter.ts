@@ -12,10 +12,10 @@ export type UserFilterType = 'include' | 'exclude' | null;
 export const useTwitterStore = defineStore('twitterStore', () => {
   const data = rawTweets as Tweet[];
   // const data = ref(rawTweets as Tweet[]);
-  const users = ref<number[]>([]);
+  const users = ref<string[]>([]);
   const userFilter = ref<UserFilterType>(null);
 
-  function toggleUser(userId: number) {
+  function toggleUser(userId: string) {
     if (users.value.includes(userId)) {
       users.value = users.value.filter((user) => user !== userId);
     } else {

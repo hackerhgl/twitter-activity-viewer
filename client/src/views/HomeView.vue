@@ -5,6 +5,7 @@ import users from '@/assets/users.json';
 import type { TwitterUser, TwitterUserIndex } from '@/types/user';
 import { useTwitterStore } from '../stores/twitter';
 import type { UserFilterType } from '../stores/twitter';
+import { getBorderToggleStyle } from '@/utils'
 
 const indexes = rawIndexes as TwitterUserIndex[];
 
@@ -18,6 +19,10 @@ const twitterStore = useTwitterStore();
 type UserFilterObject = {
     value: UserFilterType;
     label: string;
+}
+
+function getSelectedUser(userId: string) {
+    return twitterStore.users.includes(userId);
 }
 
 const userFilters: UserFilterObject[] = [
@@ -34,16 +39,6 @@ const userFilters: UserFilterObject[] = [
         label: 'Disable',
     }
 ];
-
-function getFilterStyle(isActive: boolean) {
-    return {
-        'border-zinc-800': !isActive,
-        'border-zinc-200': isActive,
-        'text-zinc-800': !isActive,
-        'text-zinc-200': isActive,
-        'bg-zinc-800': isActive,
-    };
-}
 
 </script>
 
@@ -62,7 +57,7 @@ function getFilterStyle(isActive: boolean) {
                 <template v-for="filter in userFilters" :key="filter.value">
                     <div
                         class="py-3 px-8 border-2 rounded-lg mx-2 cursor-pointer select-none transition-all"
-                        :class="getFilterStyle(twitterStore.userFilter === filter.value)"
+                        :class="getBorderToggleStyle(twitterStore.userFilter === filter.value)"
                         @click="() => twitterStore.updateUserFilter(filter.value)">
                         {{ filter.label }}
                     </div>
@@ -71,7 +66,12 @@ function getFilterStyle(isActive: boolean) {
             <div class="my-6" />
             <div class="flex flex-row flex-nowrap overflow-auto w-full">
                 <template v-for="index in indexes" :key="index.user">
-                    <UserItem :user="getUser(index.user)" :count="index.count ?? -99" :userId="index.user" />
+                    <UserItem
+                        :toggle="() => twitterStore.toggleUser(index.user)"
+                        :selected="getSelectedUser(index.user)"
+                        :user="getUser(index.user)"
+                        :count="index.count ?? -99"
+                        :userId="index.user" />
                 </template>
             </div>
         </div>
