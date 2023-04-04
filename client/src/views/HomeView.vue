@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import UserItem  from '@/components/FilterUserItem.vue';
 import TweetCard  from '@/components/TweetCard.vue';
+import TweetSorter  from '@/components/TweetSorter.vue';
 import rawIndexes from '@/assets/tweets_index.json';
 import users from '@/assets/users.json';
 import type { TwitterUser, TwitterUserIndex } from '@/types/user';
@@ -77,6 +78,9 @@ const userFilters: UserFilterObject[] = [
                 </template>
             </div>
         </div>
+        <div class="my-4" />
+            <TweetSorter />
+        <div class="my-4" />
         <div>
             Total tweets: {{ twitterStore.filtered.length }}
         </div>
