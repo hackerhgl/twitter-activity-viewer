@@ -95,11 +95,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
         return userCheck && dateCheck;
     });
 
-    if (reverseByDate.value) {
-      return orderBy(cleaned, (tweet) => tweet.created_at, 'desc');
-    }
-  
-    return cleaned;
+    return orderBy(cleaned, (tweet) => dayjs(tweet.created_at).toDate().getTime(), reverseByDate.value ? 'asc': 'desc');
   });
 
   function updateShowAfter(date?: Date) {
