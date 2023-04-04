@@ -2,6 +2,8 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import rawTweets from '@/assets/data.json';
 import type { Tweet } from '@/types/tweet';
+import {orderBy} from 'lodash';
+import dayjs from 'dayjs';
 
 // A typescript custom filter type for 'include' or 'exclude
 // 'include' means that the filter will only show tweets from the users in the filter
@@ -13,6 +15,16 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const data = rawTweets as Tweet[];
   const users = ref<string[]>([]);
   const userFilter = ref<UserFilterType>('include');
+  // const initialDate = data[0].created_at;
+  const showAfterInitialDate = data.reduce((prev, current) => (prev.created_at < current.created_at) ? prev : current).created_at;
+  const showBeforeInitialDate = data.reduce((prev, current) => (prev.created_at > current.created_at) ? prev : current).created_at;
+  const showAfterInitial = dayjs(showAfterInitialDate).subtract(1, 'day').toDate();
+  const showBeforeInitial = dayjs(showBeforeInitialDate).add(1, 'day').toDate();
+
+  const showAfter = ref(showAfterInitial);
+  const showBefore = ref(showBeforeInitial);
+
+  const reverseByDate = ref(false);
   // const userFilter = ref<UserFilterType>(null);
 
   function toggleUser(userId: string) {
@@ -34,7 +46,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
       const entitiesMentionCheck = tweet.entities?.user_mentions?.some((mention) => mention.id_str === user);
       const entitiesMediumCheck = tweet.entities?.media?.some((medium) => medium.source_user_id_str === user);
       const extendedEntities = tweet.extended_entities?.media?.some((medium) => medium.source_user_id_str === user);
-
+        
       const checksArray = [
         idCheck,
         inReplyCheck,
@@ -55,22 +67,73 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     }
 
     const userCheck = filterUserExist(tweet).length > 0;
-
     const included = userFilter.value === 'include' && userCheck;
     const excluded = userFilter.value === 'exclude' && !userCheck;
+    const checksArray = [
+      included,
+      excluded,
+    ];
+    const checks = checksArray.some((check) => check === true);
+    return checks;
+  }
 
-    return included || excluded;
-}
+  function filterDate(tweet: Tweet) {
+    const showAfterCheck = dayjs(tweet.created_at).isAfter(showAfter.value);
+    const showBeforeCheck = dayjs(tweet.created_at).isBefore(showBefore.value);
+    const checksArray = [
+      showAfterCheck,
+      showBeforeCheck
+    ]
+    const checks = checksArray.every((check) => check === true);
+    return checks;
+  }
 
   const filtered = computed(() => {
-      console.log('filtered', users.value, userFilter.value);    
-      return data.filter((tweet) => {
+      const cleaned =  data.filter((tweet) => {
         const userCheck = checkUserFilter(tweet);
-        return userCheck;
+        const dateCheck = filterDate(tweet);
+        return userCheck && dateCheck;
     });
+
+    if (reverseByDate.value) {
+      return orderBy(cleaned, (tweet) => tweet.created_at, 'desc');
+    }
+  
+    return cleaned;
   });
 
-  
+  function updateShowAfter(date?: Date) {
+    if (date) {
+      showAfter.value = date;
+    } else {
+      date = showAfterInitial;
+    }
+  }
 
-  return { data, filtered, users, userFilter, toggleUser, updateUserFilter };
+  function updateShowBefore(date?: Date) {
+    if (date) {
+      showBefore.value = date;
+    } else {
+      date = showBeforeInitial;
+    }
+  }
+  
+  function toggleReversedByDate() {
+    reverseByDate.value = !reverseByDate.value;
+  }
+
+  return {
+    data,
+    filtered,
+    users,
+    userFilter,
+    toggleUser,
+    updateUserFilter,
+    showAfter,
+    showBefore,
+    updateShowAfter,
+    updateShowBefore,
+    reverseByDate,
+    toggleReversedByDate
+  };
 })
