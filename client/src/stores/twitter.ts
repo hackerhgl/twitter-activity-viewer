@@ -22,6 +22,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const showAfter = ref(showAfterInitial);
   const showBefore = ref(showBeforeInitial);
   const reverseByDate = ref(false);
+  const reverseUsersByActions = ref(false);
 
   function toggleUser(userId: string) {
     if (users.value.includes(userId)) {
@@ -126,6 +127,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     updateShowAfter,
     updateShowBefore,
     reverseByDate,
-    toggleReversedByDate
+    toggleReversedByDate,
+    reverseUsersByActions,
   };
 })
