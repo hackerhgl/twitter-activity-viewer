@@ -84,8 +84,10 @@ const userFilters: UserFilterObject[] = [
         <div>
             Total tweets: {{ twitterStore.filtered.length }}
         </div>
-        <template v-for="tweet in twitterStore.filtered" :key="tweet.id_str">
-            <TweetCard :tweet="tweet" :user="getUser(tweet.user)" />
-        </template>
+        <div class="flex flex-row flex-wrap">
+            <template v-for="tweet in twitterStore.filtered" :key="tweet.id_str">
+                <TweetCard :tweet="tweet" :user="getUser(tweet.user)" />
+            </template>
+        </div>
     </div>
 </template>

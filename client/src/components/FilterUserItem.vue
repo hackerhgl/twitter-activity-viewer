@@ -18,20 +18,22 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-    <div class="px-4 py-4 mx-3 border-2 min-w-max rounded-lg cursor-pointer" :class="getBorderToggleStyle(selected, {text: false, bg: false})" @click="toggle">
+    <div
+        @click="toggle"
+        :class="getBorderToggleStyle(selected, {text: false, bg: false})"
+        class="px-3 pt-3 pb-2 mx-2 border-2 min-w-max rounded-lg cursor-pointer"
+    >
         <div class="flex flex-row" v-if="!!user?.name">
-            <div class="w-20 h-20">
-                <img :src="user.profile_image_url_https" :alt="user.name" class="object-contain w-16 h-16 rounded-full" />
-            </div>
+            <img :src="user.profile_image_url_https" :alt="user.name" class="object-contain w-12 h-12 mr-2 rounded-full" />
             <div class="min-w-0">
                 <div class="text-sm text-zinc-500">{{ user.name }}</div>
-                <div class="text-sm text-zinc-500">@{{ user.screen_name }}</div>
                 <div class="text-sm text-zinc-500">
                     <span>Actions:</span>
                     {{ count }}
                 </div>
             </div>
         </div>
+        <div class="my-2" />
         <div flex flex-row>
             <div class="">
                 Visit profile

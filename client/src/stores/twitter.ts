@@ -15,17 +15,13 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const data = rawTweets as Tweet[];
   const users = ref<string[]>([]);
   const userFilter = ref<UserFilterType>('include');
-  // const initialDate = data[0].created_at;
   const showAfterInitialDate = data.reduce((prev, current) => (prev.created_at < current.created_at) ? prev : current).created_at;
   const showBeforeInitialDate = data.reduce((prev, current) => (prev.created_at > current.created_at) ? prev : current).created_at;
   const showAfterInitial = dayjs(showAfterInitialDate).subtract(1, 'day').toDate();
   const showBeforeInitial = dayjs(showBeforeInitialDate).add(1, 'day').toDate();
-
   const showAfter = ref(showAfterInitial);
   const showBefore = ref(showBeforeInitial);
-
   const reverseByDate = ref(false);
-  // const userFilter = ref<UserFilterType>(null);
 
   function toggleUser(userId: string) {
     if (users.value.includes(userId)) {
