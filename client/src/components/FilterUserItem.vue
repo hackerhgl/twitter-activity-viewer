@@ -15,6 +15,10 @@ import { getBorderToggleStyle } from '@/utils';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<Props>();
 
+function openProfile() {
+    window.open(`https://twitter.com/${props.user.screen_name}`, '_blank');
+}
+
 </script>
 
 <template>
@@ -27,6 +31,7 @@ const props = defineProps<Props>();
             <img :src="user.profile_image_url_https" :alt="user.name" class="object-contain w-12 h-12 mr-2 rounded-full" />
             <div class="min-w-0">
                 <div class="text-sm text-zinc-500">{{ user.name }}</div>
+                <div class="text-xs text-zinc-500">@{{ user.screen_name }}</div>
                 <div class="text-sm text-zinc-500">
                     <span>Actions:</span>
                     {{ count }}
@@ -35,7 +40,7 @@ const props = defineProps<Props>();
         </div>
         <div class="my-2" />
         <div flex flex-row>
-            <div class="">
+            <div class="" @click="openProfile">
                 Visit profile
             </div>
         </div>

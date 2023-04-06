@@ -15,6 +15,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const data = rawTweets as Tweet[];
   const users = ref<string[]>([]);
   const userFilter = ref<UserFilterType>('include');
+  const userFilterByName = ref('');
   const showAfterInitialDate = data.reduce((prev, current) => (prev.created_at < current.created_at) ? prev : current).created_at;
   const showBeforeInitialDate = data.reduce((prev, current) => (prev.created_at > current.created_at) ? prev : current).created_at;
   const showAfterInitial = dayjs(showAfterInitialDate).subtract(1, 'day').toDate();
@@ -129,5 +130,6 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     reverseByDate,
     toggleReversedByDate,
     reverseUsersByActions,
+    userFilterByName,
   };
 })

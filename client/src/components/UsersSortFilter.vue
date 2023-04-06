@@ -47,6 +47,17 @@ const objButtonStyle = buttonStyle.split(' ').reduce((obj, key) => ({...obj, [ke
 function getButtonStyle(flag: boolean) {
     return {...objButtonStyle, ...getBorderToggleStyle(flag)}
 }
+
+function getParsedUserData() {
+    const users = indexes.map((v) => ({...v, ...getUser(v.user)})).filter((v) => {
+        if (!twitterStore.userFilterByName.length) {
+            return true;
+        }
+        const value = twitterStore.userFilterByName.toLowerCase();
+        return (v?.name ?? '').toLowerCase().includes(value) || v.screen_name.toLowerCase().includes(value);
+    });
+    return orderBy(users, (v) => v.count, [twitterStore.reverseUsersByActions ? 'asc' : 'desc']);
+}
 </script>
 
 <template>
@@ -68,17 +79,34 @@ function getButtonStyle(flag: boolean) {
                 @click="() => twitterStore.reverseUsersByActions = !twitterStore.reverseUsersByActions">
                 Reverse by actions
             </div>
+            <div class="mx-4">
+                |
+            </div>
+            <div>
+                <input
+                    type="text"
+                    placeholder="Search user"
+                    v-model="twitterStore.userFilterByName"
+                    class="p-3 my-1 focus:outline-none focus:border-0 focus:ring-zinc-700 border-0 bg-zinc-800 rounded text-xs"
+                />
+            </div>
+            <div class="mx-1" />
+            <div
+                :class="getButtonStyle(!!twitterStore.userFilterByName.length)"
+                @click="() => twitterStore.userFilterByName = ''">
+                Clear search
+            </div>
         </div>
         <div class="my-6" />
         <div class="flex flex-row flex-nowrap overflow-auto w-full">
             <template
                 :key="index.user"
-                v-for="index in orderBy(indexes, (v) => v.count, [twitterStore.reverseUsersByActions ? 'asc' : 'desc'])"
+                v-for="index in getParsedUserData()"
                 >
                 <UserItem
                     :toggle="() => twitterStore.toggleUser(index.user)"
                     :selected="getSelectedUser(index.user)"
-                    :user="getUser(index.user)"
+                    :user="index"
                     :count="index.count ?? -99"
                     :userId="index.user" />
             </template>
