@@ -16,6 +16,8 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const users = ref<string[]>([]);
   const userFilter = ref<UserFilterType>('include');
   const userFilterByName = ref('');
+  const tweetTextSearch = ref('');
+  const tweetUserMentionsSearch = ref('');
   const showAfterInitialDate = data.reduce((prev, current) => (prev.created_at < current.created_at) ? prev : current).created_at;
   const showBeforeInitialDate = data.reduce((prev, current) => (prev.created_at > current.created_at) ? prev : current).created_at;
   const showAfterInitial = dayjs(showAfterInitialDate).subtract(1, 'day').toDate();
@@ -91,7 +93,19 @@ export const useTwitterStore = defineStore('twitterStore', () => {
       const cleaned =  data.filter((tweet) => {
         const userCheck = checkUserFilter(tweet);
         const dateCheck = filterDate(tweet);
-        return userCheck && dateCheck;
+        const textCheck = tweet.text.toLowerCase().includes(tweetTextSearch.value.toLowerCase());
+        const userMentionsCheck = tweet.entities?.user_mentions?.some((mention) => {
+          const value = tweetUserMentionsSearch.value.toLowerCase();
+          return mention.screen_name.toLowerCase().includes(value) || mention.name.toLowerCase().includes(value);
+        }) || false;
+        const checksArray = [
+          userCheck,
+          dateCheck,
+          textCheck,
+          userMentionsCheck,
+        ];
+        const checks = checksArray.every((check) => check);
+        return checks;
     });
 
     return orderBy(cleaned, (tweet) => dayjs(tweet.created_at).toDate().getTime(), reverseByDate.value ? 'asc': 'desc');
@@ -133,5 +147,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     reverseUsersByActions,
     userFilterByName,
     includeMentionedUsers,
+    tweetTextSearch,
+    tweetUserMentionsSearch,
   };
 })

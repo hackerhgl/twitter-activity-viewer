@@ -29,19 +29,19 @@ function toggleIncludedUsers(target: HTMLInputElement) {
         <div>
           <label for="showAfter">Show after</label>
           <div class="my-2" />
-          <VueDatePicker v-model="twitterStore.showAfter" :onCleared="twitterStore.updateShowAfter" :clearable="false" />
+          <VueDatePicker v-model="twitterStore.showAfter" :onCleared="twitterStore.updateShowAfter" :clearable="false" class="w-40" />
         </div>
         <div class="mx-4" />
         <div>
           <label for="showAfter">Show before</label>
           <div class="my-2" />
-          <VueDatePicker v-model="twitterStore.showBefore" :onCleared="twitterStore.updateShowBefore" :clearable="false" />
+          <VueDatePicker v-model="twitterStore.showBefore" :onCleared="twitterStore.updateShowBefore" :clearable="false" class="w-40" />
         </div>
         <div class="mx-4 text-4xl">|</div>
         <div
-        :class="getButtonStyle(twitterStore.reverseByDate)"
-        @click="twitterStore.toggleReversedByDate">
-          Reverse by date
+          :class="getButtonStyle(twitterStore.reverseByDate)"
+          @click="twitterStore.toggleReversedByDate">
+            Reverse by date
         </div>
         <div class="mx-4 text-4xl">|</div>
         <div>
@@ -50,16 +50,32 @@ function toggleIncludedUsers(target: HTMLInputElement) {
             label="include mentioned users"
             :onChange="toggleIncludedUsers" />
         </div>
-        <!-- <div>
-          <label for="showAfter">Show only tweets with</label>
-          <div class="my-2" />
-          <input
-            v-model="twitterStore.searchTweetText"
+        <div class="mx-4 text-4xl">|</div>
+        <input
             type="text"
-            class="border-2 border-zinc-600 rounded-md px-3 pt-3 pb-2 flex flex-col h-full"
-            placeholder="Enter a word or phrase" />
-        </div> -->
+            placeholder="Tweet by text"
+            v-model="twitterStore.tweetTextSearch"
+            class="p-3 my-1 focus:outline-none focus:border-0 focus:ring-zinc-700 border-0 bg-zinc-800 rounded text-xs"
+        />
+        <div class="mx-1" />
+        <div
+          :class="getButtonStyle(!!twitterStore.tweetTextSearch.length)"
+          @click="twitterStore.tweetTextSearch = ''">
+            Clear
+        </div>
+        <div class="mx-4 text-4xl">|</div>
+        <input
+            type="text"
+            placeholder="Tweet by user mentions"
+            v-model="twitterStore.tweetUserMentionsSearch"
+            class="p-3 my-1 focus:outline-none focus:border-0 focus:ring-zinc-700 border-0 bg-zinc-800 rounded text-xs"
+        />
+        <div class="mx-1" />
+        <div
+          :class="getButtonStyle(!!twitterStore.tweetUserMentionsSearch.length)"
+          @click="twitterStore.tweetUserMentionsSearch = ''">
+            Clear
+        </div>
       </div>
-
   </div>
 </template>
