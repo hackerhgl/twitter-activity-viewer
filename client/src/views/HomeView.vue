@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TweetCard  from '@/components/TweetCard.vue';
-import DatesSortFilter  from '@/components/DatesSortFilter.vue';
+import TweetsSortFilter  from '@/components/TweetsSortFilter.vue';
 import UsersSortFilter  from '@/components/UsersSortFilter.vue';
 import users from '@/assets/users.json';
 import type { TwitterUser } from '@/types/user';
@@ -26,7 +26,7 @@ const twitterStore = useTwitterStore();
         </div>
         <UsersSortFilter />
         <div class="my-4" />
-        <DatesSortFilter />
+        <TweetsSortFilter />
         <div class="my-4" />
         <div>
             Total tweets: {{ twitterStore.filtered.length }}

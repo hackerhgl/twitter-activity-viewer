@@ -5,7 +5,7 @@ import users from '@/assets/users.json';
 import type { TwitterUser, TwitterUserIndex } from '@/types/user';
 import { useTwitterStore } from '../stores/twitter';
 import type { UserFilterType } from '../stores/twitter';
-import { getBorderToggleStyle } from '@/utils'
+import { getButtonStyle } from '@/utils'
 import orderBy from 'lodash/orderBy';
 import { DynamicScroller } from 'vue-virtual-scroller';
 
@@ -42,12 +42,7 @@ const userFilters: UserFilterObject[] = [
     }
 ];
 
-const buttonStyle = "py-2 px-3 border rounded-lg mx-1 cursor-pointer select-none transition-all text-sm";
-const objButtonStyle = buttonStyle.split(' ').reduce((obj, key) => ({...obj, [key]: true}), {});
 
-function getButtonStyle(flag: boolean) {
-    return {...objButtonStyle, ...getBorderToggleStyle(flag)}
-}
 
 function getParsedUserData() {
     const users = indexes.map((v) => ({...v, ...getUser(v.user)})).filter((v) => {
@@ -97,6 +92,15 @@ function getParsedUserData() {
                 @click="() => twitterStore.userFilterByName = ''">
                 Clear search
             </div>
+            <div class="mx-4">
+                |
+            </div>
+            <div
+                :class="getButtonStyle(true)"
+                @click="() => twitterStore.users = []">
+                Clear selection
+            </div>
+
         </div>
         <div class="my-6" />
         <div class="flex flex-row flex-nowrap overflow-auto w-full">

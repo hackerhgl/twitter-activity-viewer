@@ -24,6 +24,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const showBefore = ref(showBeforeInitial);
   const reverseByDate = ref(false);
   const reverseUsersByActions = ref(false);
+  const includeMentionedUsers = ref(false);
 
   function toggleUser(userId: string) {
     if (users.value.includes(userId)) {
@@ -41,7 +42,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     return users.value.filter((user) => {
       const idCheck = user === tweet.user;
       const inReplyCheck = user === tweet.in_reply_to_user_id?.toString();
-      const entitiesMentionCheck = tweet.entities?.user_mentions?.some((mention) => mention.id_str === user);
+      const entitiesMentionCheck = includeMentionedUsers.value ? tweet.entities?.user_mentions?.some((mention) => mention.id_str === user): false;
       const entitiesMediumCheck = tweet.entities?.media?.some((medium) => medium.source_user_id_str === user);
       const extendedEntities = tweet.extended_entities?.media?.some((medium) => medium.source_user_id_str === user);
         
@@ -131,5 +132,6 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     toggleReversedByDate,
     reverseUsersByActions,
     userFilterByName,
+    includeMentionedUsers,
   };
 })
