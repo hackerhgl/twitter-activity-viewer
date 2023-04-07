@@ -7,6 +7,7 @@ import { useTwitterStore } from '../stores/twitter';
 import type { UserFilterType } from '../stores/twitter';
 import { getBorderToggleStyle } from '@/utils'
 import orderBy from 'lodash/orderBy';
+import { DynamicScroller } from 'vue-virtual-scroller';
 
 const indexes = rawIndexes as TwitterUserIndex[];
 
@@ -99,17 +100,31 @@ function getParsedUserData() {
         </div>
         <div class="my-6" />
         <div class="flex flex-row flex-nowrap overflow-auto w-full">
-            <template
-                :key="index.user"
-                v-for="index in getParsedUserData()"
+            <DynamicScroller
+                direction="horizontal"
+                :min-item-size="120"
+                key-field="user"
+                class="scroller  h-28"
+                :items="getParsedUserData()"
                 >
-                <UserItem
-                    :toggle="() => twitterStore.toggleUser(index.user)"
-                    :selected="getSelectedUser(index.user)"
-                    :user="index"
-                    :count="index.count ?? -99"
-                    :userId="index.user" />
-            </template>
+                <template v-slot="{ item, index, active }">
+                    <DynamicScrollerItem
+                        :item="item"
+                        :active="active"
+                        :size-dependencies="[
+                        item.user,
+                        ]"
+                        :data-index="index"
+                    >
+                    <UserItem
+                        :toggle="() => twitterStore.toggleUser(item.user)"
+                        :selected="getSelectedUser(item.user)"
+                        :user="item"
+                        :count="item.count ?? -99"
+                        :userId="item.user" />
+                    </DynamicScrollerItem>
+                </template>
+            </DynamicScroller>
         </div>
     </div>
 </template>
