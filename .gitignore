@@ -4,3 +4,4 @@ node_modules
 data.json
 users.json
 tweets_index.json
+tmp

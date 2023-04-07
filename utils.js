@@ -1,4 +1,5 @@
 const {fields} = require('./fields');
+const fs = require('fs');
 
 async function getButtonSafe(button) {
     try {
@@ -48,4 +49,16 @@ async function getReduxDump(page) {
     }
 }
 
-module.exports = { clickButton, loader, sleep, getReduxDump };
+
+function safeCreateDir(path) {
+    try {
+        const check  = fs.existsSync(path);
+        if (!check) {
+            fs.mkdirSync(path, { recursive: true });
+        }
+    } catch (error) {
+        
+    }
+}
+
+module.exports = { clickButton, loader, sleep, getReduxDump, safeCreateDir };

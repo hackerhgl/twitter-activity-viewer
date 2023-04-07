@@ -32,7 +32,7 @@ function main() {
             return 0;
         });
 
-        fs.writeFileSync('./tweets_index.json', JSON.stringify(array));
+        fs.writeFileSync('./tweets_index.json', JSON.stringify(array, null, 2));
     } catch (e) {
         console.log('error in tweets indexing main');
         console.log(e);
