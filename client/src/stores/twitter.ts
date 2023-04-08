@@ -150,4 +150,4 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     tweetTextSearch,
     tweetUserMentionsSearch,
   };
-})
+}, { persist: true })
