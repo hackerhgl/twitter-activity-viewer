@@ -35,9 +35,10 @@ function visitTweet() {
     window.open(`https://twitter.com/${props.user.screen_name}/status/${tweetId}`, '_blank');
 }
 
-function isVisited() {
-    return twitterStore.visitedTweets.some((tweet) => tweet.id === props.tweet.id_str);
-}
+const visited = twitterStore.visitedTweets.find((tweet) => tweet.id === props.tweet.id_str)
+const isVisited = !!visited;
+
+const visitedDate = () =>  dayjs(visited?.date).format('DD/MM/YYYY HH:mm:ss');
 
 </script>
 
@@ -83,7 +84,7 @@ function isVisited() {
             <div
                 @click="() => visitTweet()"
                 class="bg-zinc-600 text-center p-2 rounded text-sm cursor-pointer">
-                Open <span v-if="isVisited()" class="text-xs">(visited)</span>
+                Open <span v-if="isVisited" class="text-xs scale-95 inline-block text-zinc-200">({{ visitedDate() }})</span>
             </div>
             <div class="my-1" />
         </div>

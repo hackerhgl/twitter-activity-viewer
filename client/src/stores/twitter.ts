@@ -2,7 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import rawTweets from '@/assets/data.json';
 import type { Tweet } from '@/types/tweet';
-import {orderBy} from 'lodash';
+import {orderBy, isString} from 'lodash';
 import dayjs from 'dayjs';
 
 // A typescript custom filter type for 'include' or 'exclude
@@ -109,19 +109,40 @@ export const useTwitterStore = defineStore('twitterStore', () => {
           return mention.screen_name.toLowerCase().includes(value) || mention.name.toLowerCase().includes(value);
         });
         const userMentionsCheck = tweetUserMentionsSearch.value === '' || userMentionsFilter;
-        const visitedCheck = includeVisitedTweets.value ? true : !visitedTweets.value.some((visited) => visited.id === tweet.id_str);
+        const includedVisitedCheck = includeVisitedTweets.value ? true : !visitedTweets.value.some((visited) => visited.id === tweet.id_str);
+        const onlyVisitedCheck = onlyVisitedTweets.value ? visitedTweets.value.some((visited) => visited.id === tweet.id_str) : true;
+
+        const visitCheck = onlyVisitedTweets.value ? onlyVisitedCheck : includedVisitedCheck;
         const checksArray = [
           userCheck,
           dateCheck,
           textCheck,
           userMentionsCheck,
-          visitedCheck,
+          visitCheck,
         ];
         const checks = checksArray.every((check) => check);
         return checks;
     });
 
-    return orderBy(cleaned, (tweet) => dayjs(tweet.created_at).toDate().getTime(), reverseByDate.value ? 'asc': 'desc');
+    let sorted: Tweet[];
+
+    if (sortVisitedTweets.value) {
+      const direction = reverseVisitedTweets.value ? 'asc' : 'desc';
+      console.log('direction', direction);
+      
+      sorted = orderBy(cleaned, (value) => {
+        const visited = visitedTweets.value.find((v) => v.id === value.id_str);
+        if (visited) {
+          const parsedDate = isString(visited.date) ? dayjs(visited.date).toDate() : visited.date;
+          return parsedDate.getTime();
+        }
+        return 0;
+      }, direction);
+    }else {
+      sorted = orderBy(cleaned, (tweet) => dayjs(tweet.created_at).toDate().getTime(), reverseByDate.value ? 'asc': 'desc')
+    }
+
+    return sorted;
   });
 
   function updateShowAfter(date?: Date) {
@@ -145,6 +166,8 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   }
 
   function toggleVisitedReversedByDate() {
+    console.log('toggleVisitedReversedByDate');
+    
     reverseVisitedTweets.value = !reverseVisitedTweets.value;
   }
 
