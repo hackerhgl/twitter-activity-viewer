@@ -31,12 +31,12 @@ function visitProfile(userName: string) {
 
 function visitTweet() {
     const tweetId = props.tweet.id_str;
-    twitterStore.addToVisitedTweetIds(tweetId);
+    twitterStore.addToVisitedTweets(tweetId);
     window.open(`https://twitter.com/${props.user.screen_name}/status/${tweetId}`, '_blank');
 }
 
 function isVisited() {
-    return twitterStore.visitedTweetIds.includes(props.tweet.id_str);
+    return twitterStore.visitedTweets.some((tweet) => tweet.id === props.tweet.id_str);
 }
 
 </script>

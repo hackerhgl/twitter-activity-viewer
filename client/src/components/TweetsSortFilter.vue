@@ -19,8 +19,22 @@ function toggleIncludedUsers(target: HTMLInputElement) {
   twitterStore.includeMentionedUsers = target.checked;
 }
 
-function toggleVisitedTweets(target: HTMLInputElement) {
+function toggleIncludeVisitedTweets(target: HTMLInputElement) {
   twitterStore.includeVisitedTweets = target.checked;
+  twitterStore.onlyVisitedTweets = false;
+}
+
+function toggleOnlyVisitedTweets(target: HTMLInputElement) {
+  twitterStore.onlyVisitedTweets = target.checked;
+  twitterStore.includeVisitedTweets = false;
+}
+
+function toggleVisitedSortTweets(target: HTMLInputElement) {
+  const { checked } = target;
+  twitterStore.sortVisitedTweets = checked;
+  if (!checked) {
+    twitterStore.reverseVisitedTweets = false;
+  }
 }
 
 </script>
@@ -53,13 +67,6 @@ function toggleVisitedTweets(target: HTMLInputElement) {
             :onChange="toggleIncludedUsers" />
         </div>
         <div class="mx-4 text-4xl">|</div>
-        <div>
-          <InputToggle
-            :checked="twitterStore.includeVisitedTweets"
-            label="Visited tweets"
-            :onChange="toggleVisitedTweets" />
-        </div>
-        <div class="mx-4 text-4xl">|</div>
         <input
             type="text"
             placeholder="Tweet by text"
@@ -84,6 +91,35 @@ function toggleVisitedTweets(target: HTMLInputElement) {
           :class="getButtonStyle(!!twitterStore.tweetUserMentionsSearch.length)"
           @click="twitterStore.tweetUserMentionsSearch = ''">
             Clear
+        </div>
+      </div>
+      <div class="my-2" />
+      <div class="flex flex-row flex-start items-center">
+        <div>
+          <InputToggle
+            :checked="twitterStore.includeVisitedTweets"
+            label="Include visited"
+            :onChange="toggleIncludeVisitedTweets" />
+        </div>
+        <div class="mx-4 text-4xl" />
+        <div>
+          <InputToggle
+            :checked="twitterStore.onlyVisitedTweets"
+            label="Only visited"
+            :onChange="toggleOnlyVisitedTweets" />
+        </div>
+        <div class="mx-4 text-4xl">|</div>
+        <div class="flex flex-row items-center">
+          <InputToggle
+            :checked="twitterStore.sortVisitedTweets"
+            label="Visited sort"
+            :onChange="toggleVisitedSortTweets" />
+          <div class="mx-2" />
+          <div
+            :class="getButtonStyle(twitterStore.reverseVisitedTweets)"
+            @click="twitterStore.toggleVisitedReversedByDate">
+              Reverse by visited date
+          </div>
         </div>
       </div>
   </div>

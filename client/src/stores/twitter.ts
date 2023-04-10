@@ -10,6 +10,11 @@ import dayjs from 'dayjs';
 // 'exclude' means that the filter will only show tweets from users not in the filter
 export type UserFilterType = 'include' | 'exclude' | null;
 
+interface VisitedTweet {
+  id: string;
+  date: Date;
+}
+
 
 export const useTwitterStore = defineStore('twitterStore', () => {
   const data = rawTweets as Tweet[];
@@ -28,7 +33,10 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const reverseUsersByActions = ref(false);
   const includeMentionedUsers = ref(false);
   const includeVisitedTweets = ref(true);
-  const visitedTweetIds = ref<string[]>([]);
+  const onlyVisitedTweets = ref(false);
+  const sortVisitedTweets = ref(false);
+  const reverseVisitedTweets = ref(false);
+  const visitedTweets = ref<VisitedTweet[]>([]);
 
   function toggleUser(userId: string) {
     if (users.value.includes(userId)) {
@@ -101,7 +109,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
           return mention.screen_name.toLowerCase().includes(value) || mention.name.toLowerCase().includes(value);
         });
         const userMentionsCheck = tweetUserMentionsSearch.value === '' || userMentionsFilter;
-        const visitedCheck = includeVisitedTweets.value ? true : !visitedTweetIds.value.includes(tweet.id_str);
+        const visitedCheck = includeVisitedTweets.value ? true : !visitedTweets.value.some((visited) => visited.id === tweet.id_str);
         const checksArray = [
           userCheck,
           dateCheck,
@@ -136,9 +144,19 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     reverseByDate.value = !reverseByDate.value;
   }
 
-  function addToVisitedTweetIds(id: string) {
-    if (!visitedTweetIds.value.includes(id)) {
-      visitedTweetIds.value.push(id);
+  function toggleVisitedReversedByDate() {
+    reverseVisitedTweets.value = !reverseVisitedTweets.value;
+  }
+
+  function addToVisitedTweets(id: string) {
+    const index = visitedTweets.value.findIndex((tweet) => tweet.id === id);
+    if (index > -1) {
+      visitedTweets.value[index].date = new Date();
+    } else {
+      visitedTweets.value.push({
+        id,
+        date: new Date(),
+      });
     }
   }
 
@@ -160,8 +178,12 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     includeMentionedUsers,
     tweetTextSearch,
     tweetUserMentionsSearch,
-    visitedTweetIds,
-    addToVisitedTweetIds,
+    visitedTweets,
+    onlyVisitedTweets,
+    sortVisitedTweets,
+    reverseVisitedTweets,
+    toggleVisitedReversedByDate,
+    addToVisitedTweets,
     includeVisitedTweets,
   };
 }, { persist: true })
