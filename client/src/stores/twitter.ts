@@ -27,6 +27,8 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const reverseByDate = ref(false);
   const reverseUsersByActions = ref(false);
   const includeMentionedUsers = ref(false);
+  const includeVisitedTweets = ref(true);
+  const visitedTweetIds = ref<string[]>([]);
 
   function toggleUser(userId: string) {
     if (users.value.includes(userId)) {
@@ -94,15 +96,18 @@ export const useTwitterStore = defineStore('twitterStore', () => {
         const userCheck = checkUserFilter(tweet);
         const dateCheck = filterDate(tweet);
         const textCheck = tweet.text.toLowerCase().includes(tweetTextSearch.value.toLowerCase());
-        const userMentionsCheck = tweet.entities?.user_mentions?.some((mention) => {
+        const userMentionsFilter = tweet.entities?.user_mentions?.some((mention) => {
           const value = tweetUserMentionsSearch.value.toLowerCase();
           return mention.screen_name.toLowerCase().includes(value) || mention.name.toLowerCase().includes(value);
-        }) || false;
+        });
+        const userMentionsCheck = tweetUserMentionsSearch.value === '' || userMentionsFilter;
+        const visitedCheck = includeVisitedTweets.value ? true : !visitedTweetIds.value.includes(tweet.id_str);
         const checksArray = [
           userCheck,
           dateCheck,
           textCheck,
           userMentionsCheck,
+          visitedCheck,
         ];
         const checks = checksArray.every((check) => check);
         return checks;
@@ -131,6 +136,12 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     reverseByDate.value = !reverseByDate.value;
   }
 
+  function addToVisitedTweetIds(id: string) {
+    if (!visitedTweetIds.value.includes(id)) {
+      visitedTweetIds.value.push(id);
+    }
+  }
+
   return {
     data,
     filtered,
@@ -149,5 +160,8 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     includeMentionedUsers,
     tweetTextSearch,
     tweetUserMentionsSearch,
+    visitedTweetIds,
+    addToVisitedTweetIds,
+    includeVisitedTweets,
   };
 }, { persist: true })

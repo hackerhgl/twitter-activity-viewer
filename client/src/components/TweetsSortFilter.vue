@@ -19,19 +19,21 @@ function toggleIncludedUsers(target: HTMLInputElement) {
   twitterStore.includeMentionedUsers = target.checked;
 }
 
+function toggleVisitedTweets(target: HTMLInputElement) {
+  twitterStore.includeVisitedTweets = target.checked;
+}
+
 </script>
 
 <template>
     <div class="flex flex-col">
       <div class="flex flex-row flex-start items-center">
-        <h2 class="text-xl">Tweets filter:</h2>
-        <div class="mx-2" />
         <div>
           <label for="showAfter">Show after</label>
           <div class="my-2" />
           <VueDatePicker v-model="twitterStore.showAfter" :onCleared="twitterStore.updateShowAfter" :clearable="false" class="w-40" />
         </div>
-        <div class="mx-4" />
+        <div class="mx-2" />
         <div>
           <label for="showAfter">Show before</label>
           <div class="my-2" />
@@ -47,8 +49,15 @@ function toggleIncludedUsers(target: HTMLInputElement) {
         <div>
           <InputToggle
             :checked="twitterStore.includeMentionedUsers"
-            label="include mentioned users"
+            label="Mentioned users"
             :onChange="toggleIncludedUsers" />
+        </div>
+        <div class="mx-4 text-4xl">|</div>
+        <div>
+          <InputToggle
+            :checked="twitterStore.includeVisitedTweets"
+            label="Visited tweets"
+            :onChange="toggleVisitedTweets" />
         </div>
         <div class="mx-4 text-4xl">|</div>
         <input

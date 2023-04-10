@@ -11,9 +11,11 @@ import type { TwitterUser } from '@/types/user';
 import type { Tweet } from '@/types/tweet';
 import users from '@/assets/users.json';
 import dayjs from 'dayjs';
+import { useTwitterStore } from '@/stores/twitter';
 const props = defineProps<Props>();
 
 const createdAt = dayjs(props.tweet.created_at).format('DD/MM/YYYY');
+const twitterStore = useTwitterStore();
 
 // eslint-disable-next-line vue/no-setup-props-destructure
 const userMentions = props.tweet.entities.user_mentions;
@@ -28,7 +30,13 @@ function visitProfile(userName: string) {
 }
 
 function visitTweet() {
-    window.open(`https://twitter.com/${props.user.screen_name}/status/${props.tweet.id_str}`, '_blank');
+    const tweetId = props.tweet.id_str;
+    twitterStore.addToVisitedTweetIds(tweetId);
+    window.open(`https://twitter.com/${props.user.screen_name}/status/${tweetId}`, '_blank');
+}
+
+function isVisited() {
+    return twitterStore.visitedTweetIds.includes(props.tweet.id_str);
 }
 
 </script>
@@ -75,7 +83,7 @@ function visitTweet() {
             <div
                 @click="() => visitTweet()"
                 class="bg-zinc-600 text-center p-2 rounded text-sm cursor-pointer">
-                Open
+                Open <span v-if="isVisited()" class="text-xs">(visited)</span>
             </div>
             <div class="my-1" />
         </div>
