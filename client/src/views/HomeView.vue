@@ -2,6 +2,7 @@
 import TweetCard  from '@/components/TweetCard.vue';
 import TweetsSortFilter  from '@/components/TweetsSortFilter.vue';
 import UsersSortFilter  from '@/components/UsersSortFilter.vue';
+import AppHeader from '@/components/AppHeader.vue';
 import users from '@/assets/users.json';
 import type { TwitterUser } from '@/types/user';
 import { useTwitterStore } from '../stores/twitter';
@@ -18,12 +19,8 @@ const twitterStore = useTwitterStore();
 
 <template>
     <div class="px-6">
+        <AppHeader />
     <!-- <div class="mx-auto md:max-w-3xl px-4 sm:px-6 lg:px-0"> -->
-        <div>
-            <div id="header" class="py-4">
-                <h1 class="text-3xl text-blue-500">Twitter data dashboard</h1>
-            </div>
-        </div>
         <UsersSortFilter />
         <div class="my-4" />
         <TweetsSortFilter />

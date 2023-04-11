@@ -183,6 +183,30 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     }
   }
 
+  function clearState(includeVisited = false) {
+    resetFilters();
+    if (includeVisited) {
+      visitedTweets.value = [];
+    }
+  }
+
+  function resetFilters() {
+    users.value = [];
+    userFilter.value = null;
+    userFilterByName.value = '';
+    tweetTextSearch.value = '';
+    tweetUserMentionsSearch.value = '';
+    showAfter.value = showAfterInitial;
+    showBefore.value = showBeforeInitial;
+    reverseByDate.value = false;
+    reverseUsersByActions.value = false;
+    includeMentionedUsers.value = false;
+    includeVisitedTweets.value = true;
+    onlyVisitedTweets.value = false;
+    sortVisitedTweets.value = false;
+    reverseVisitedTweets.value = false;
+  }
+
   return {
     data,
     filtered,
@@ -208,5 +232,6 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     toggleVisitedReversedByDate,
     addToVisitedTweets,
     includeVisitedTweets,
+    clearState,
   };
 }, { persist: true })
