@@ -42,8 +42,6 @@ const userFilters: UserFilterObject[] = [
     }
 ];
 
-
-
 function getParsedUserData() {
     const users = indexes.map((v) => ({...v, ...getUser(v.user)})).filter((v) => {
         if (!twitterStore.userFilterByName.length) {

@@ -48,6 +48,7 @@ export interface Tweet {
   self_thread?: SelfThread
   quoted_status_id?: number
   quoted_status?: string
+  retweeted_status?: string
   conversation_control?: ConversationControl
   limited_actions?: string
   card?: string

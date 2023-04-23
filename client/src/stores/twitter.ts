@@ -36,6 +36,8 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const onlyVisitedTweets = ref(false);
   const sortVisitedTweets = ref(false);
   const reverseVisitedTweets = ref(false);
+  const includeRetweets = ref(true);
+  const onlyRetweets = ref(false);
   const visitedTweets = ref<VisitedTweet[]>([]);
 
   function toggleUser(userId: string) {
@@ -109,16 +111,25 @@ export const useTwitterStore = defineStore('twitterStore', () => {
           return mention.screen_name.toLowerCase().includes(value) || mention.name.toLowerCase().includes(value);
         });
         const userMentionsCheck = tweetUserMentionsSearch.value === '' || userMentionsFilter;
+
         const includedVisitedCheck = includeVisitedTweets.value ? true : !visitedTweets.value.some((visited) => visited.id === tweet.id_str);
         const onlyVisitedCheck = onlyVisitedTweets.value ? visitedTweets.value.some((visited) => visited.id === tweet.id_str) : true;
-
         const visitCheck = onlyVisitedTweets.value ? onlyVisitedCheck : includedVisitedCheck;
+
+
+        const includedRetweetCheck = includeRetweets.value ? true : !tweet.retweeted_status;
+        const onlyRetweetCheck = onlyRetweets.value ? tweet.retweeted_status : true;
+        const retweetCheck = onlyRetweets.value ? onlyRetweetCheck : includedRetweetCheck;
+
+
         const checksArray = [
           userCheck,
           dateCheck,
           textCheck,
           userMentionsCheck,
           visitCheck,
+          retweetCheck,
+          retweetCheck,
         ];
         const checks = checksArray.every((check) => check);
         return checks;
@@ -128,8 +139,6 @@ export const useTwitterStore = defineStore('twitterStore', () => {
 
     if (sortVisitedTweets.value) {
       const direction = reverseVisitedTweets.value ? 'asc' : 'desc';
-      console.log('direction', direction);
-      
       sorted = orderBy(cleaned, (value) => {
         const visited = visitedTweets.value.find((v) => v.id === value.id_str);
         if (visited) {
@@ -166,8 +175,6 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   }
 
   function toggleVisitedReversedByDate() {
-    console.log('toggleVisitedReversedByDate');
-    
     reverseVisitedTweets.value = !reverseVisitedTweets.value;
   }
 
@@ -205,6 +212,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     onlyVisitedTweets.value = false;
     sortVisitedTweets.value = false;
     reverseVisitedTweets.value = false;
+    includeRetweets.value = true;
   }
 
   return {
@@ -232,6 +240,8 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     toggleVisitedReversedByDate,
     addToVisitedTweets,
     includeVisitedTweets,
+    includeRetweets,
+    onlyRetweets,
     clearState,
   };
 }, { persist: true })

@@ -29,6 +29,16 @@ function toggleOnlyVisitedTweets(target: HTMLInputElement) {
   twitterStore.includeVisitedTweets = false;
 }
 
+function toggleIncludeRetweets(target: HTMLInputElement) {
+  twitterStore.includeRetweets = target.checked;
+  twitterStore.onlyRetweets = false;
+}
+
+function toggleOnlyRetweets(target: HTMLInputElement) {
+  twitterStore.onlyRetweets = target.checked;
+  twitterStore.includeRetweets = false;
+}
+
 function toggleVisitedSortTweets(target: HTMLInputElement) {
   const { checked } = target;
   twitterStore.sortVisitedTweets = checked;
@@ -58,6 +68,20 @@ function toggleVisitedSortTweets(target: HTMLInputElement) {
           :class="getButtonStyle(twitterStore.reverseByDate)"
           @click="twitterStore.toggleReversedByDate">
             Reverse by date
+        </div>
+        <div class="mx-4 text-4xl">|</div>
+        <div>
+          <InputToggle
+            :checked="twitterStore.includeRetweets"
+            label="Include retweets"
+            :onChange="toggleIncludeRetweets" />
+        </div>
+        <div class="mx-2" />
+        <div>
+          <InputToggle
+            :checked="twitterStore.onlyRetweets"
+            label="Only retweets"
+            :onChange="toggleOnlyRetweets" />
         </div>
         <div class="mx-4 text-4xl">|</div>
         <div>
