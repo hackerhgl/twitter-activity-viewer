@@ -39,6 +39,8 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const includeRetweets = ref(true);
   const onlyRetweets = ref(false);
   const visitedTweets = ref<VisitedTweet[]>([]);
+  const includeNoActionUsers = ref(false);
+
 
   function toggleUser(userId: string) {
     if (users.value.includes(userId)) {
@@ -190,6 +192,10 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     }
   }
 
+  function toggleIncludeNoActionUsers() {
+    includeNoActionUsers.value = !includeNoActionUsers.value;
+  }
+
   function clearState(includeVisited = false) {
     resetFilters();
     if (includeVisited) {
@@ -243,5 +249,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     includeRetweets,
     onlyRetweets,
     clearState,
+    includeNoActionUsers,
+    toggleIncludeNoActionUsers,
   };
 }, { persist: true })

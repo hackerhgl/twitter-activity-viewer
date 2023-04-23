@@ -43,13 +43,29 @@ const userFilters: UserFilterObject[] = [
 ];
 
 function getParsedUserData() {
-    const users = indexes.map((v) => ({...v, ...getUser(v.user)})).filter((v) => {
-        if (!twitterStore.userFilterByName.length) {
-            return true;
-        }
+
+    console.log('function getParsedUserData() {', twitterStore.includeNoActionUsers);
+    
+    const users = indexes.map((v) => ({...v, ...getUser(v.user)})).filter((v) => { 
         const value = twitterStore.userFilterByName.toLowerCase();
-        return (v?.name ?? '').toLowerCase().includes(value) || v.screen_name.toLowerCase().includes(value);
+        const nameFilter = (v?.name ?? '').toLowerCase().includes(value) || v.screen_name.toLowerCase().includes(value);
+        const nameCheck = twitterStore.userFilterByName.length && nameFilter;
+        
+        if (!twitterStore.includeNoActionUsers) {
+            const { visitedTweets } = twitterStore;
+            const tweets = twitterStore.data.filter((tweet) => visitedTweets.some(vt => vt.id === tweet.id_str) && tweet.user === v.user);
+            if (tweets.length > 0) {
+                console.log(v.name, tweets.length, visitedTweets.length);
+            }
+
+            const check = visitedTweets.length === tweets.length;
+            return check;
+        }
+        
+        return nameCheck;
     });
+    console.log(users.length);
+    
     return orderBy(users, (v) => v.count, [twitterStore.reverseUsersByActions ? 'asc' : 'desc']);
 }
 </script>
@@ -97,6 +113,14 @@ function getParsedUserData() {
                 :class="getButtonStyle(true)"
                 @click="() => twitterStore.users = []">
                 Clear selection
+            </div>
+            <div class="mx-4">
+                |
+            </div>
+            <div
+                :class="getButtonStyle(twitterStore.includeNoActionUsers)"
+                @click="twitterStore.toggleIncludeNoActionUsers">
+                Include no actions
             </div>
 
         </div>
