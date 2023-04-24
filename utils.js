@@ -1,4 +1,4 @@
-const {fields} = require('./fields');
+const { fields } = require('./fields');
 const fs = require('fs');
 
 async function getButtonSafe(button) {
@@ -10,9 +10,10 @@ async function getButtonSafe(button) {
     }
 }
 
+// This function is used to click on a button with a specific text
+// name: text in span
 async function clickButton(page, name) {
   const buttons = await page.$$('div[role="button"]');
-
   for (let i=0; i<buttons.length; i++) {
         const button = buttons[i];
         const check = await getButtonSafe(button);
@@ -34,7 +35,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
+// This function is used to get the redux dump from the page
 async function getReduxDump(page) {
     try {
         const data = await page.evaluate(function () {

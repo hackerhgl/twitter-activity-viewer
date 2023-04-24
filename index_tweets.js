@@ -1,5 +1,6 @@
-const tweets = require('./data.json');
+const tweets = require('./data/data.json');
 const fs = require('fs');
+const path = require('path');
 
 function main() {
     try {
@@ -32,7 +33,7 @@ function main() {
             return 0;
         });
 
-        fs.writeFileSync('./tweets_index.json', JSON.stringify(array, null, 2));
+        fs.writeFileSync(path.join('data', 'tweets_index.json'), JSON.stringify(array, null, 2));
     } catch (e) {
         console.log('error in tweets indexing main');
         console.log(e);

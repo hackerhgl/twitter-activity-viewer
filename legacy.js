@@ -33,7 +33,7 @@ await page.waitForSelector(fields.tweet.base)
         console.log('POST DATA')
         console.log(data)
 
-        fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
+        fs.writeFileSync('data/data.json', JSON.stringify(data, null, 2));
 
         const tweets = data.entities.tweets.entities;
         const tweetIds = Object.keys(tweets);

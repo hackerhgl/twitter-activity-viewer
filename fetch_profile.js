@@ -1,6 +1,6 @@
 const { getReduxDump } = require('./utils');
 const { fields } = require('./fields');
-const tweets = require('./data.json');
+const tweets = require('./data/data.json');
 
 async function getReduxUsersDump(page) {
     try {

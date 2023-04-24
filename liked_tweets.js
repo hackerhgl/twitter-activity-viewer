@@ -1,6 +1,7 @@
 const { fields } = require('./fields');
 const fs  = require('fs');
 const { sleep, getReduxDump } = require('./utils');
+const path = require('path');
 
 async function scrollToBottom(page) {
     try {
@@ -62,8 +63,8 @@ async function fetchLikedTweets(page) {
             repeated = 0;
             tweets = [...data.tweets];
             await scrollAndWait(page);
-            fs.writeFileSync('users.json', JSON.stringify(data.users, null, 2));
-            fs.writeFileSync('data.json', JSON.stringify(tweets, null, 2));
+            fs.writeFileSync(path.join('data', 'users.json'), JSON.stringify(data.users, null, 2));
+            fs.writeFileSync(path.join('data', 'data.json'), JSON.stringify(tweets, null, 2));
         }
     } catch (e) {
         console.log("Error in likedTweets");
