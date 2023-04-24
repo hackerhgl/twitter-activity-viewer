@@ -1,12 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const files = ['data','tweets_index','users'].map((v) => path.join('data', `${v}.json`));
+const files = ['data','tweets_index','users'].map((v) => `${v}.json`);
 const destination = path.join('client', 'src', 'assets');
 
 async function main() {
-    files.forEach((path) => {
-        fs.copyFileSync(path, path.join(destination, path));
+    files.forEach((file) => {
+        const source = path.join('data', file);
+        fs.copyFileSync(source, path.join(destination, file));
     });
 }
 

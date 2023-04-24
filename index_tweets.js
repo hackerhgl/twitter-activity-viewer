@@ -4,12 +4,15 @@ const path = require('path');
 
 function main() {
     try {
+        // { 'userId': ['tweetId'] }
         const index = {};
         tweets.forEach((tweet) => {
-            if (index[tweet.user] > 0) {
-                index[tweet.user] += 1;
+            const { user, id_str: id } = tweet;
+            if (index[user]) {
+                // index[user].count += 1;
+                index[user].push(id);
             } else {
-                index[tweet.user] = 1;
+                index[user] = [id];
             }
         });
 
@@ -17,17 +20,16 @@ function main() {
 
         Object.keys(index).forEach((key) => {
             array.push({
+                tweets: index[key],
                 user: key,
-                count: index[key],
             });
         });
-        console.log(array);
 
         array.sort((a, b) => {
-            if (a.count > b.count) {
+            if (a.tweets.length > b.tweets.length) {
                 return -1;
             }
-            if (a.count < b.count) {
+            if (a.tweets.length < b.tweets.length) {
                 return 1;
             }
             return 0;
