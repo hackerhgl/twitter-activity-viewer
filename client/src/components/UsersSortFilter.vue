@@ -44,29 +44,26 @@ const userFilters: UserFilterObject[] = [
 
 function getParsedUserData() {
 
-    console.log('function getParsedUserData() {', twitterStore.includeNoActionUsers);
+    console.log('function getParsedUserData() {', twitterStore.userFilterByName.length);
     
-    const users = indexes.map((v) => ({...v, ...getUser(v.user)})).filter((v) => { 
-        const value = twitterStore.userFilterByName.toLowerCase();
-        const nameFilter = (v?.name ?? '').toLowerCase().includes(value) || v.screen_name.toLowerCase().includes(value);
-        const nameCheck = twitterStore.userFilterByName.length && nameFilter;
-        
-        if (!twitterStore.includeNoActionUsers) {
-            const { visitedTweets } = twitterStore;
-            const tweets = twitterStore.data.filter((tweet) => visitedTweets.some(vt => vt.id === tweet.id_str) && tweet.user === v.user);
-            if (tweets.length > 0) {
-                console.log(v.name, tweets.length, visitedTweets.length);
-            }
+    const mappedUsers = indexes.map((index) => ({...index, ...getUser(index.user)}));
 
-            const check = visitedTweets.length === tweets.length;
-            return check;
+    const users = mappedUsers.filter((user) => { 
+        const value = twitterStore.userFilterByName.toLowerCase();
+        const nameFilter = (user?.name ?? '').toLowerCase().includes(value) || user.screen_name.toLowerCase().includes(value);
+        const nameCheck = twitterStore.userFilterByName.length ? nameFilter : true;
+
+        if (!twitterStore.includeNoActionUsers) {
+            const visited = twitterStore.visitedTweets;
+            const everyTweetVisited = user.tweets.every((userTweetId) => visited.find((visitedTweetId) => visitedTweetId.id === userTweetId));
+
+            return !everyTweetVisited && nameCheck;
         }
         
         return nameCheck;
     });
-    console.log(users.length);
     
-    return orderBy(users, (v) => v.count, [twitterStore.reverseUsersByActions ? 'asc' : 'desc']);
+    return orderBy(users, (v) => v.tweets.length, [twitterStore.reverseUsersByActions ? 'asc' : 'desc']);
 }
 </script>
 
@@ -146,7 +143,7 @@ function getParsedUserData() {
                         :toggle="() => twitterStore.toggleUser(item.user)"
                         :selected="getSelectedUser(item.user)"
                         :user="item"
-                        :count="item.count ?? -99"
+                        :count="item.tweets.length ?? -99"
                         :userId="item.user" />
                     </DynamicScrollerItem>
                 </template>

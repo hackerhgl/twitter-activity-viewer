@@ -2,7 +2,7 @@ export type Root = TwitterUser[]
 
 export interface TwitterUserIndex {
   user: string;
-  count?: number;
+  tweets: string[];
 }
 
 export interface TwitterUser {
