@@ -15,6 +15,14 @@ function getUser(userId: string) {
 
 const twitterStore = useTwitterStore();
 
+function click20Tweets() {
+    const items = document.getElementsByClassName('visited-button');
+    const sliced = Array.prototype.slice.call(items, 0, 20);
+    sliced.forEach((item: any) => {
+        item.click();
+    });
+}
+
 </script>
 
 <template>
@@ -33,5 +41,7 @@ const twitterStore = useTwitterStore();
                 <TweetCard :tweet="tweet" :user="getUser(tweet.user)" />
             </template>
         </div>
+
+        <div class="fixed bottom-5 right-4 border px-1 py-2">Click 20</div>
     </div>
 </template>

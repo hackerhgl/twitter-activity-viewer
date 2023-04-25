@@ -83,7 +83,7 @@ const visitedDate = () =>  dayjs(visited?.date).format('DD/MM/YYYY HH:mm:ss');
             <div class="flex flex-1 flex-grow" />
             <div
                 @click="() => visitTweet()"
-                class="bg-zinc-600 text-center p-2 rounded text-sm cursor-pointer">
+                class="bg-zinc-600 text-center p-2 rounded text-sm cursor-pointer visited-button">
                 Open <span v-if="isVisited" class="text-xs scale-95 inline-block text-zinc-200">({{ visitedDate() }})</span>
             </div>
             <div class="my-1" />
