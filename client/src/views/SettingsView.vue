@@ -21,5 +21,11 @@ const twitterStore = useTwitterStore();
       <div class="my-2" />
       <button :class="getButtonStyle(true)" @click="twitterStore.clearState(false)">Clear</button>
     </div>
+    <div class="my-4" />
+    <div>
+      <div>Export state</div>
+      <div class="my-2" />
+      <button :class="getButtonStyle(true)" @click="twitterStore.exportState()">Export State</button>
+    </div>
   </div>
 </template>

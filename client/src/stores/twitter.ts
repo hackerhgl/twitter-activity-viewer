@@ -239,8 +239,48 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     sortVisitedTweets.value = false;
     reverseVisitedTweets.value = false;
     includeRetweets.value = true;
+    onlyRetweets.value = false;
+    visitedTweets.value = [];
+    includeNoActionUsers.value = false;
+    filterTweetsByUserActions.value = false;
+    filterTweetsByUserActionsGreater.value = true;
+    filterTweetsByUserActionsCount.value = '0';
   }
 
+  function exportState() {
+    const state = {
+      users: users.value,
+      userFilter: userFilter.value,
+      userFilterByName: userFilterByName.value,
+      tweetTextSearch: tweetTextSearch.value,
+      tweetUserMentionsSearch: tweetUserMentionsSearch.value,
+      showAfter: showAfter.value,
+      showBefore: showBefore.value,
+      reverseByDate: reverseByDate.value,
+      reverseUsersByActions: reverseUsersByActions.value,
+      includeMentionedUsers: includeMentionedUsers.value,
+      includeVisitedTweets: includeVisitedTweets.value,
+      onlyVisitedTweets: onlyVisitedTweets.value,
+      sortVisitedTweets: sortVisitedTweets.value,
+      reverseVisitedTweets: reverseVisitedTweets.value,
+      includeRetweets: includeRetweets.value,
+      onlyRetweets: onlyRetweets.value,
+      visitedTweets: visitedTweets.value,
+      includeNoActionUsers: includeNoActionUsers.value,
+      filterTweetsByUserActions: filterTweetsByUserActions.value,
+      filterTweetsByUserActionsGreater: filterTweetsByUserActionsGreater.value,
+      filterTweetsByUserActionsCount: filterTweetsByUserActionsCount.value,
+    };
+
+    const encoded = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+    const element = document.createElement('a');
+    element.setAttribute("href", encoded);
+    element.setAttribute("download", "state.json");
+    document.body.appendChild(element); // required for firefox
+    element.click();
+    element.remove();
+
+  }
   return {
     data,
     filtered,
@@ -275,5 +315,6 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     filterTweetsByUserActionsGreater,
     filterTweetsByUserActionsCount,
     toggleFilterTweetsByUserActionsGreater,
+    exportState,
   };
 }, { persist: true })
