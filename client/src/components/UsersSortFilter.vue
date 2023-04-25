@@ -43,26 +43,18 @@ const userFilters: UserFilterObject[] = [
 ];
 
 function getParsedUserData() {
-
-    console.log('function getParsedUserData() {', twitterStore.userFilterByName.length);
-    
     const mappedUsers = indexes.map((index) => ({...index, ...getUser(index.user)}));
-
-    const users = mappedUsers.filter((user) => { 
+    const users = mappedUsers.filter((user) => {
         const value = twitterStore.userFilterByName.toLowerCase();
         const nameFilter = (user?.name ?? '').toLowerCase().includes(value) || user.screen_name.toLowerCase().includes(value);
         const nameCheck = twitterStore.userFilterByName.length ? nameFilter : true;
-
         if (!twitterStore.includeNoActionUsers) {
             const visited = twitterStore.visitedTweets;
             const everyTweetVisited = user.tweets.every((userTweetId) => visited.find((visitedTweetId) => visitedTweetId.id === userTweetId));
-
             return !everyTweetVisited && nameCheck;
         }
-        
         return nameCheck;
     });
-    
     return orderBy(users, (v) => v.tweets.length, [twitterStore.reverseUsersByActions ? 'asc' : 'desc']);
 }
 </script>
@@ -127,7 +119,7 @@ function getParsedUserData() {
                 direction="horizontal"
                 :min-item-size="120"
                 key-field="user"
-                class="scroller  h-28"
+                class="scroller h-28"
                 :items="getParsedUserData()"
                 >
                 <template v-slot="{ item, index, active }">

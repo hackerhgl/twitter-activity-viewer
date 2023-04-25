@@ -4,7 +4,8 @@ import rawTweets from '@/assets/data.json';
 import type { Tweet } from '@/types/tweet';
 import {orderBy, isString} from 'lodash';
 import dayjs from 'dayjs';
-
+import rawIndexes from '@/assets/tweets_index.json';
+import type {  TwitterUserIndex } from '@/types/user';
 // A typescript custom filter type for 'include' or 'exclude
 // 'include' means that the filter will only show tweets from the users in the filter
 // 'exclude' means that the filter will only show tweets from users not in the filter
@@ -15,6 +16,7 @@ interface VisitedTweet {
   date: Date;
 }
 
+const indexes = rawIndexes as TwitterUserIndex[];
 
 export const useTwitterStore = defineStore('twitterStore', () => {
   const data = rawTweets as Tweet[];
@@ -40,6 +42,9 @@ export const useTwitterStore = defineStore('twitterStore', () => {
   const onlyRetweets = ref(false);
   const visitedTweets = ref<VisitedTweet[]>([]);
   const includeNoActionUsers = ref(false);
+  const filterTweetsByUserActions = ref(false);
+  const filterTweetsByUserActionsGreater = ref(true);
+  const filterTweetsByUserActionsCount = ref('0');
 
 
   function toggleUser(userId: string) {
@@ -118,11 +123,21 @@ export const useTwitterStore = defineStore('twitterStore', () => {
         const onlyVisitedCheck = onlyVisitedTweets.value ? visitedTweets.value.some((visited) => visited.id === tweet.id_str) : true;
         const visitCheck = onlyVisitedTweets.value ? onlyVisitedCheck : includedVisitedCheck;
 
-
         const includedRetweetCheck = includeRetweets.value ? true : !tweet.retweeted_status;
         const onlyRetweetCheck = onlyRetweets.value ? tweet.retweeted_status : true;
         const retweetCheck = onlyRetweets.value ? onlyRetweetCheck : includedRetweetCheck;
 
+        let filterCountCheck = true;
+        if (filterTweetsByUserActions.value) {
+          const tweetsCount = indexes.find(index => index.user === tweet.user)?.tweets?.length ?? 0;
+          const count  = parseInt(filterTweetsByUserActionsCount.value, 10);
+          const greater = tweetsCount > count;
+          const lesser = tweetsCount < count;
+          const check = filterTweetsByUserActionsGreater.value ? greater : lesser;
+          filterCountCheck = check;
+        }
+        // console.log();
+        
 
         const checksArray = [
           userCheck,
@@ -132,6 +147,7 @@ export const useTwitterStore = defineStore('twitterStore', () => {
           visitCheck,
           retweetCheck,
           retweetCheck,
+          filterCountCheck,
         ];
         const checks = checksArray.every((check) => check);
         return checks;
@@ -196,6 +212,10 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     includeNoActionUsers.value = !includeNoActionUsers.value;
   }
 
+  function toggleFilterTweetsByUserActionsGreater() {
+    filterTweetsByUserActionsGreater.value = !filterTweetsByUserActionsGreater.value;
+  }
+
   function clearState(includeVisited = false) {
     resetFilters();
     if (includeVisited) {
@@ -251,5 +271,9 @@ export const useTwitterStore = defineStore('twitterStore', () => {
     clearState,
     includeNoActionUsers,
     toggleIncludeNoActionUsers,
+    filterTweetsByUserActions,
+    filterTweetsByUserActionsGreater,
+    filterTweetsByUserActionsCount,
+    toggleFilterTweetsByUserActionsGreater,
   };
 }, { persist: true })
