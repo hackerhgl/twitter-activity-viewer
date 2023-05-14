@@ -18,19 +18,11 @@ const twitterStore = useTwitterStore();
 function click20Tweets() {
     const items = document.getElementsByClassName('visited-button');
     const sliced = Array.prototype.slice.call(items, 0, 20);
-    // sliced.forEach((item, index) => {
-    //     setTimeout(() => {
-    //         item.click();
-    //     }, index*20);
-    // });
-    const interval = setInterval(() => {
-        const item = sliced.shift();
-        if (item) {
+    sliced.forEach((item, index) => {
+        setTimeout(() => {
             item.click();
-        } else {
-            clearInterval(interval);
-        }
-    }, 10);
+        }, index*100);
+    });
 }
 
 </script>
