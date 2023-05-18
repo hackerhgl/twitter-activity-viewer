@@ -1,9 +1,9 @@
-const { fields } = require('./fields');
+const { fields } = require('./static/fields');
 const fs = require('fs');
 
 async function getButtonSafe(button) {
     try {
-        const check = await button.$('div span span', { })
+        const check = await button.$('div span span', {});
         return check;
     } catch {
         return null;

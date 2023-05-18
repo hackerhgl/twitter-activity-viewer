@@ -1,4 +1,4 @@
-const { fields } = require('./fields');
+const { fields } = require('./static/fields');
 const fs  = require('fs');
 const { sleep, getReduxDump } = require('./utils');
 const path = require('path');

@@ -1,5 +1,5 @@
-const { auth }  = require('./creds');
-const { fields } = require('./fields');
+const { auth }  = require('./config/creds');
+const { fields } = require('./static/fields');
 const { clickButton, loader } = require('./utils');
 
 async function login(page) {

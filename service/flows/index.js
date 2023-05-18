@@ -17,13 +17,12 @@ async function main() {
             await login(page);
         }
 
-        // await fetchLikedTweets(page);
+        await fetchLikedTweets(page);
 
     } catch (error) {
      console.log('Error in main');
      console.log(error);
     }
 }
-
 
 main();
