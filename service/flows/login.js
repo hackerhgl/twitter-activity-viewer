@@ -1,4 +1,4 @@
-const { auth }  = require('./config/creds');
+const { auth }  = require('./configs/creds');
 const { fields } = require('./static/fields');
 const { clickButton, loader } = require('./utils');
 
