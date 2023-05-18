@@ -8,12 +8,19 @@
     "bundle": "node bundle.js",
     "index:tweets": "node index_tweets.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tmp": "node tmp.js"
+    "tmp": "node tmp.js",
+    "ts": "ts-node src/index.ts"
   },
   "author": "hackerhgl",
   "license": "ISC",
   "dependencies": {
     "dayjs": "^1.11.7",
     "puppeteer": "^19.7.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.0.4"
   }
 }

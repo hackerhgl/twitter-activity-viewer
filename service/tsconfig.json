@@ -1,0 +1,18 @@
+{
+  "ts-node": {
+    "require": [
+      "tsconfig-paths/register"
+    ]
+  },
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": "src",
+    "rootDir": "src",
+    "paths": {
+      "*": ["./*"]
+    },
+    "types": ["node"],
+    "resolveJsonModule": true,
+    "ignoreDeprecations": "5.0",
+  }
+}
