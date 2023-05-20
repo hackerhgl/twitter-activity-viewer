@@ -1,11 +1,19 @@
-const tweets = require('./data/data.json');
-const fs = require('fs');
-const path = require('path');
+import { loadJsonFile, writeJsonFile } from "utils";
+
+interface Index {
+    [key: string]: string[];
+}
+
+interface TweetIndex {
+    tweets: string[];
+    user: string;
+}
 
 function main() {
     try {
+        const tweets = loadJsonFile<any[]>('tweets');
         // { 'userId': ['tweetId'] }
-        const index = {};
+        const index: Index = {};
         tweets.forEach((tweet) => {
             const { user, id_str: id } = tweet;
             if (index[user]) {
@@ -16,7 +24,7 @@ function main() {
             }
         });
 
-        const array = [];
+        const array: TweetIndex[] = [];
 
         Object.keys(index).forEach((key) => {
             array.push({
@@ -35,7 +43,8 @@ function main() {
             return 0;
         });
 
-        fs.writeFileSync(path.join('data', 'tweets_index.json'), JSON.stringify(array, null, 2));
+        const json = JSON.stringify(array);
+        writeJsonFile('tweets_index', json);
     } catch (e) {
         console.log('error in tweets indexing main');
         console.log(e);

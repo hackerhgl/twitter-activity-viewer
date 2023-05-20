@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "bundle": "node bundle.js",
-    "index:tweets": "node index_tweets.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "tmp": "node tmp.js",
-    "ts": "ts-node src/index.ts"
+    "ts": "ts-node src/index.ts",
+    "index:tweets": "ts-node src/scripts/index_tweets.ts",
+    "dump": "ts-node src/scripts/dump.ts",
+    "bundle": "ts-node src/scripts/bundle.ts",
+    "testing": "ts-node src/scripts/testing.ts"
   },
   "author": "hackerhgl",
   "license": "ISC",

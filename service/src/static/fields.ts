@@ -1,4 +1,4 @@
-const fields = {
+export const fields = {
     homeBase: 'div[data-testid="primaryColumn"] div[aria-label="Home timeline"]',
     email: 'input[autocomplete="username"]',
     text: 'input[name="text"]',
@@ -10,5 +10,3 @@ const fields = {
     },
     loader: 'div[role="progressbar"] svg circle'
 };
-
-module.exports = {fields};

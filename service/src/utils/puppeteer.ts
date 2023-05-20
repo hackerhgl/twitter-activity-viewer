@@ -1,7 +1,6 @@
-const { fields } = require('./static/fields');
-const fs = require('fs');
+import { fields } from 'static/fields';
 
-async function getButtonSafe(button) {
+export async function getButtonSafe(button) {
     try {
         const check = await button.$('div span span', {});
         return check;
@@ -12,7 +11,7 @@ async function getButtonSafe(button) {
 
 // This function is used to click on a button with a specific text
 // name: text in span
-async function clickButton(page, name) {
+export async function clickButton(page, name) {
   const buttons = await page.$$('div[role="button"]');
   for (let i=0; i<buttons.length; i++) {
         const button = buttons[i];
@@ -26,19 +25,15 @@ async function clickButton(page, name) {
     }
 }
 
-async function loader(page) {
+export async function loader(page) {
     // await page.waitForSelector(fields.loader);
     await page.waitForFunction(() => !document.querySelector(fields.loader));
 }
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 // This function is used to get the redux dump from the page
-async function getReduxDump(page) {
+export async function getReduxDump(page) {
     try {
-        const data = await page.evaluate(function () {
+        const data = await page.evaluate(() => {
         const root = document.getElementById('react-root')
         const state = root._reactRootContainer._internalRoot.current.memoizedState.element.props.children.props.store.getState()
         return state;
@@ -49,17 +44,3 @@ async function getReduxDump(page) {
         console.log(error);
     }
 }
-
-
-function safeCreateDir(path) {
-    try {
-        const check  = fs.existsSync(path);
-        if (!check) {
-            fs.mkdirSync(path, { recursive: true });
-        }
-    } catch (error) {
-        
-    }
-}
-
-module.exports = { clickButton, loader, sleep, getReduxDump, safeCreateDir };
