@@ -1,30 +1,25 @@
+import { Tweet } from "types/tweet";
+import { TwitterUserIndex } from "types/user";
 import { loadJsonFile, writeJsonFile } from "utils";
 
-interface Index {
-    [key: string]: string[];
-}
-
 interface TweetIndex {
-    tweets: string[];
-    user: string;
+    [key: string]: string[];
 }
 
 function main() {
     try {
-        const tweets = loadJsonFile<any[]>('tweets');
-        // { 'userId': ['tweetId'] }
-        const index: Index = {};
+        const tweets = loadJsonFile<Tweet[]>('tweets');
+        const index: TweetIndex = {};
         tweets.forEach((tweet) => {
             const { user, id_str: id } = tweet;
             if (index[user]) {
-                // index[user].count += 1;
                 index[user].push(id);
             } else {
                 index[user] = [id];
             }
         });
 
-        const array: TweetIndex[] = [];
+        const array: TwitterUserIndex[] = [];
 
         Object.keys(index).forEach((key) => {
             array.push({
