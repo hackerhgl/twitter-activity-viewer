@@ -1,5 +1,3 @@
-export type Root = TwitterUser[]
-
 export interface TwitterUserIndex {
 	user: string
 	tweets: string[]
@@ -11,7 +9,7 @@ export interface TwitterUser {
 	default_profile?: boolean
 	default_profile_image?: boolean
 	description?: string
-	entities?: Entities
+	entities?: TwitterUserEntities
 	fast_followers_count?: number
 	favourites_count?: number
 	followers_count?: number
@@ -36,12 +34,11 @@ export interface TwitterUser {
 	want_retweets?: boolean
 	withheld_in_countries?: string[]
 	id_str: string
-	business_account?: BusinessAccount
+	business_account?: TwitterUserBusinessAccount
 	is_blue_verified?: boolean
 	has_graduated_access?: boolean
 	created_at?: string
-	professional?: Professional
-	highlightedLabel?: HighlightedLabel
+	professional?: TwitterUserProfessional
 	verified_type?: string
 	following?: boolean
 	super_follow_eligible?: boolean
@@ -72,9 +69,9 @@ export interface TwitterUser {
 	is_profile_translatable?: boolean
 	smart_blocked_by?: boolean
 	smart_blocking?: boolean
-	verification_info?: VerificationInfo
-	birthdate?: Birthdate
-	profile_location?: ProfileLocation
+	verification_info?: TwitterUserVerificationInfo
+	birthdate?: TwitterUserBirthdate
+	profile_location?: TwitterUserProfileLocation
 	pinned_tweet_ids?: number[]
 	muting?: boolean
 	advertiser_account_type?: string
@@ -85,93 +82,93 @@ export interface TwitterUser {
 	needs_phone_verification?: boolean
 }
 
-export interface Entities {
-	description: Description
-	url?: Url2
+export interface TwitterUserEntities {
+	description: TwitterUserEntitiesDescription
+	url?: TwitterUserEntitiesDescriptionUrl2
 }
 
-export interface Description {
-	urls: Url[]
+export interface TwitterUserEntitiesDescription {
+	urls: TwitterUserEntitiesDescriptionUrl[]
 	hashtags?: any[]
 	symbols?: any[]
 	user_mentions?: any[]
 }
 
-export interface Url {
+export interface TwitterUserEntitiesDescriptionUrl {
 	display_url: string
 	expanded_url: string
 	url: string
 	indices: number[]
 }
 
-export interface Url2 {
-	urls: Url3[]
+export interface TwitterUserEntitiesDescriptionUrl2 {
+	urls: TwitterUserEntitiesDescriptionUrl3[]
 }
 
-export interface Url3 {
+export interface TwitterUserEntitiesDescriptionUrl3 {
 	display_url: string
 	expanded_url: string
 	url: string
 	indices: number[]
 }
 
-export interface BusinessAccount {
+export interface TwitterUserBusinessAccount {
 	affiliates_count?: number
 }
 
-export interface Professional {
+export interface TwitterUserProfessional {
 	rest_id: string
 	professional_type: string
-	category: Category[]
+	category: TwitterUserProfessionalCategory[]
 }
 
-export interface Category {
+export interface TwitterUserProfessionalCategory {
 	id: number
 	name: string
 	icon_name: string
 }
 
-export interface HighlightedLabel {
-	badge: Badge
+export interface TwitterUserHighlightedLabel {
+	badge: TwitterUserHighlightedLabelBadge
 	description: string
-	longDescription?: LongDescription
+	longDescription?: TwitterUserHighlightedLabelLongDescription
 	userLabelType?: string
-	url?: Url4
+	url?: TwitterUserHighlightedLabelUrl4
 	userLabelDisplayType?: string
 }
 
-export interface Badge {
+export interface TwitterUserHighlightedLabelBadge {
 	url: string
 }
 
-export interface LongDescription {
+export interface TwitterUserHighlightedLabelLongDescription {
 	text: string
-	entities: Entity[]
+	entities: TwitterUserHighlightedLabelLongDescriptionEntity[]
 }
 
-export interface Entity {
+export interface TwitterUserHighlightedLabelLongDescriptionEntity {
 	fromIndex: number
 	toIndex: number
-	ref: Ref
+	ref: TwitterUserHighlightedLabelLongDescriptionEntityRef
 }
 
-export interface Ref {
-	mention: Mention
+export interface TwitterUserHighlightedLabelLongDescriptionEntityRef {
+	mention: TwitterUserHighlightedLabelLongDescriptionEntityRefMention
 }
 
-export interface Mention {
+export interface TwitterUserHighlightedLabelLongDescriptionEntityRefMention {
 	id: string
 	screenName: string
 }
 
-export interface Url4 {
+export interface TwitterUserHighlightedLabelUrl4 {
 	url: string
 	urlType: string
 }
 
-export interface VerificationInfo {}
+export interface TwitterUserVerificationInfo {}
 
-export interface Birthdate {
+export interface TwitterUserBirthdate {
 	day: number
 	month: number
 	year: number
@@ -179,7 +176,7 @@ export interface Birthdate {
 	year_visibility: string
 }
 
-export interface ProfileLocation {
+export interface TwitterUserProfileLocation {
 	id: string
 	url: string
 	place_type: string
@@ -189,7 +186,7 @@ export interface ProfileLocation {
 	country: string
 	contained_within: any[]
 	bounding_box: any
-	attributes: Attributes
+	attributes: TwitterUserProfileLocationAttributes
 }
 
-export interface Attributes {}
+export interface TwitterUserProfileLocationAttributes {}
