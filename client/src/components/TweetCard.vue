@@ -6,8 +6,8 @@ interface Props {
 </script>
 
 <script setup lang="ts">
-import type { TwitterUser } from "@/types/user"
-import type { Tweet } from "@/types/tweet"
+import type { TwitterUser } from "types/user"
+import type { Tweet } from "types/tweet"
 import users from "@/assets/users.json"
 import dayjs from "dayjs"
 import { useTwitterStore } from "@/stores/twitter"

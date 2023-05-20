@@ -9,7 +9,7 @@ interface Props {
 </script>
 
 <script setup lang="ts">
-import type { TwitterUser } from "@/types/user"
+import type { TwitterUser } from "types/user"
 import { getBorderToggleStyle } from "@/utils"
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<Props>()

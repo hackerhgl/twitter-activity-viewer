@@ -1,11 +1,11 @@
 import { ref, computed } from "vue"
 import { defineStore } from "pinia"
-import rawTweets from "@/assets/data.json"
-import type { Tweet } from "@/types/tweet"
+import rawTweets from "@/assets/tweets.json"
 import { orderBy, isString } from "lodash"
 import dayjs from "dayjs"
 import rawIndexes from "@/assets/tweets_index.json"
-import type { TwitterUserIndex } from "@/types/user"
+import type { TwitterUserIndex } from "types/user"
+import type { Tweet } from "types/tweet"
 // A typescript custom filter type for 'include' or 'exclude
 // 'include' means that the filter will only show tweets from the users in the filter
 // 'exclude' means that the filter will only show tweets from users not in the filter

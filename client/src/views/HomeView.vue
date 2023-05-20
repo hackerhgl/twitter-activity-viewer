@@ -4,8 +4,8 @@ import TweetsSortFilter from "@/components/TweetsSortFilter.vue"
 import UsersSortFilter from "@/components/UsersSortFilter.vue"
 import AppHeader from "@/components/AppHeader.vue"
 import users from "@/assets/users.json"
-import type { TwitterUser } from "@/types/user"
-import { useTwitterStore } from "../stores/twitter"
+import type { TwitterUser } from "types/user"
+import { useTwitterStore } from "@/stores/twitter"
 
 function getUser(userId: string) {
 	const user = (users as any)[userId]

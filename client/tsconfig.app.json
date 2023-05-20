@@ -1,13 +1,18 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
   // "include": ["**.js", "**.ts", "**.vue", "**.json"],
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json"],
+  // "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json", "*.ts"],
+  "include": ["**/**.json", "**/**.ts", "**/**.js", "**/**.vue", "env.d.ts", "../types/**.ts"],
+  // "include": ["**/**.json", "**.vue"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
+    // "rootDirs": [".", "../types"],
+    "rootDir": "./..",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "types/*": ["../types/*"],
     },
     "resolveJsonModule": true,
     "ignoreDeprecations": "5.0",
