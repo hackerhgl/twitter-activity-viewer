@@ -1,8 +1,9 @@
+import { ElementHandle, Page } from 'puppeteer';
 import { fields } from 'static/fields';
 
-export async function getButtonSafe(button) {
+export async function getButtonSafe(button: ElementHandle<HTMLDivElement>) {
     try {
-        const check = await button.$('div span span', {});
+        const check = await button.$('div span span');
         return check;
     } catch {
         return null;
@@ -11,7 +12,7 @@ export async function getButtonSafe(button) {
 
 // This function is used to click on a button with a specific text
 // name: text in span
-export async function clickButton(page, name) {
+export async function clickButton(page: Page, name: string) {
   const buttons = await page.$$('div[role="button"]');
   for (let i=0; i<buttons.length; i++) {
         const button = buttons[i];
@@ -31,14 +32,14 @@ export async function loader(page) {
 }
 
 // This function is used to get the redux dump from the page
-export async function getReduxDump(page) {
+export async function getReduxDump(page: Page) {
     try {
         const data = await page.evaluate(() => {
-        const root = document.getElementById('react-root')
-        const state = root._reactRootContainer._internalRoot.current.memoizedState.element.props.children.props.store.getState()
-        return state;
-    });
-    return data;   
+            const root = document.getElementById('react-root') as any;
+            const state = root._reactRootContainer._internalRoot.current.memoizedState.element.props.children.props.store.getState();
+            return state;
+        });
+        return data;   
     } catch (error) {
         console.log('Error in getReduxTweetsDump');
         console.log(error);

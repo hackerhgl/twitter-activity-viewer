@@ -1,9 +1,11 @@
-const { fields } = require('./static/fields');
-const fs  = require('fs');
-const { sleep, getReduxDump } = require('./utils');
-const path = require('path');
+import * as path from 'path';
+import * as fs  from 'fs';
+import { fields } from 'static/fields';
+import { sleep } from 'utils';
+import { getReduxDump } from 'utils/puppeteer';
+import { Page } from 'puppeteer';
 
-async function scrollToBottom(page) {
+async function scrollToBottom(page: Page) {
     try {
         await page.evaluate(async () => {
             const scrollHeight = document.body.scrollHeight;
@@ -15,7 +17,7 @@ async function scrollToBottom(page) {
     }
 }
 
-async function scrollAndWait(page) {
+async function scrollAndWait(page: Page) {
     try {
         await scrollToBottom(page);
         await page.waitForSelector(fields.loader);
@@ -29,7 +31,7 @@ async function scrollAndWait(page) {
     }
 }
 
-async function getReduxParsedDump(page) {
+async function getReduxParsedDump(page: Page) {
     try {
         const state = await getReduxDump(page);
         const tweets = Object.values(state.entities.tweets.entities);
@@ -41,7 +43,7 @@ async function getReduxParsedDump(page) {
     }
 }
 
-async function fetchLikedTweets(page) {
+export async function flowFetchLikedTweets(page: Page) {
     try {
         await page.goto('https://twitter.com/hackerhgl/likes', { waitUntil: 'networkidle2' })
         await page.waitForSelector(fields.tweet.base)
@@ -71,5 +73,3 @@ async function fetchLikedTweets(page) {
         console.log(e);
     }   
 }
-
-module.exports = { fetchLikedTweets };

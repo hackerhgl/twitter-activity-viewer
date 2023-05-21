@@ -1,6 +1,6 @@
-const puppeteer = require('puppeteer');
-const login = require('./login');
-const { fetchLikedTweets } = require('./liked_tweets');
+import puppeteer from 'puppeteer';
+import { flowLogin } from './login';
+import { flowFetchLikedTweets } from './liked_tweets';
 
 async function main() {
     try {
@@ -11,13 +11,11 @@ async function main() {
         page.setDefaultTimeout(0)
         await page.goto('https://twitter.com/login', { waitUntil: 'networkidle2' })
         const url = await page.url();
-        console.log('URL PRE AUTH');
 
         if (!url.includes('home')) {
-            await login(page);
+            await flowLogin(page);
         }
-
-        await fetchLikedTweets(page);
+        await flowFetchLikedTweets(page);
 
     } catch (error) {
      console.log('Error in main');
