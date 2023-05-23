@@ -1,7 +1,6 @@
 import * as path from 'path';
-import * as fs  from 'fs';
 import { fields } from 'static/fields';
-import { sleep } from 'utils';
+import { sleep, writeJsonFile } from 'utils';
 import { getReduxDump } from 'utils/puppeteer';
 import { Page } from 'puppeteer';
 
@@ -65,8 +64,8 @@ export async function flowFetchLikedTweets(page: Page) {
             repeated = 0;
             tweets = [...data.tweets];
             await scrollAndWait(page);
-            fs.writeFileSync(path.join('data', 'users.json'), JSON.stringify(data.users, null, 2));
-            fs.writeFileSync(path.join('data', 'data.json'), JSON.stringify(tweets, null, 2));
+            writeJsonFile('users', JSON.stringify(data.users, null, 2));
+            writeJsonFile('tweets', JSON.stringify(tweets, null, 2));
         }
     } catch (e) {
         console.log("Error in likedTweets");
