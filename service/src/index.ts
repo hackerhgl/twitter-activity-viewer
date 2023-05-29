@@ -1,4 +1,3 @@
-import { auth } from 'configs/creds';
+import { auth } from 'configs/creds'
 
-
-console.log(auth);
+console.log(auth)

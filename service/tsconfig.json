@@ -1,5 +1,5 @@
 {
-  "include": ["../types/**.ts", "**/**.ts"],
+  "include": ["../types/**.ts", "**/**.ts", "./.eslintrc.js"],
   "ts-node": {
     "require": [
       "tsconfig-paths/register"

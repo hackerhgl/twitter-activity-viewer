@@ -10,7 +10,9 @@
     "index:tweets": "ts-node src/scripts/index_tweets.ts",
     "dump": "ts-node src/scripts/dump.ts",
     "bundle": "ts-node src/scripts/bundle.ts",
-    "testing": "ts-node src/scripts/testing.ts"
+    "testing": "ts-node src/scripts/testing.ts",
+    "lint": "eslint --ext .ts src",
+    "lint:fix": "eslint --fix --ext .ts src"
   },
   "author": "hackerhgl",
   "license": "ISC",
@@ -20,6 +22,16 @@
   },
   "devDependencies": {
     "@types/node": "^20.2.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "@typescript-eslint/parser": "^5.59.7",
+    "eslint": "^8.41.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "prettier": "2.8.8",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4"
