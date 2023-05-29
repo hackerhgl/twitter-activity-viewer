@@ -1,3 +1,1 @@
-export const clients = [
-  ['client', 'src', 'assets']
-]
+export const clients = [['client', 'src', 'assets']];
