@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import * as dayjs from 'dayjs'
+import dayjs from 'dayjs'
 import { safeCreateDir } from 'utils'
 
 const files = ['tweets', 'tweets_index', 'users'].map(v => `${v}.json`)

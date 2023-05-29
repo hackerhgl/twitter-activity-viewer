@@ -6,6 +6,9 @@
     ]
   },
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
     "composite": true,
     "baseUrl": "./",
     "rootDir": "./..",
@@ -14,7 +17,7 @@
       "types/*": ["../types/*"],
     },
     "types": ["node"],
-    "resolveJsonModule": true,
     "ignoreDeprecations": "5.0",
+    "strictNullChecks": true,
   }
 }

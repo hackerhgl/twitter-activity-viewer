@@ -29,7 +29,10 @@ async function fetchProfile (page: Page, username: string) {
 
 export async function fetchProfilesFromTweets (page: Page) {
   try {
-    const tweets = await loadJsonFile<Tweet[]>('tweets')
+    const tweets = loadJsonFile<Tweet[]>('tweets')
+    if (!tweets) {
+      throw new Error('No tweets found')
+    }
     const profiles = new Set<any>()
     for (let i = 0; i < tweets.length; i++) {
       const tweet = tweets[i]

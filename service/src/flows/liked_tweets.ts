@@ -3,6 +3,8 @@ import { fields } from 'static/fields'
 import { sleep, writeJsonFile } from 'utils'
 import { getReduxDump } from 'utils/puppeteer'
 import { type Page } from 'puppeteer'
+import { type Tweet } from 'types/tweet'
+import { type TwitterUser } from 'types/user'
 
 async function scrollToBottom (page: Page) {
   try {
@@ -20,7 +22,7 @@ async function scrollAndWait (page: Page) {
   try {
     await scrollToBottom(page)
     await page.waitForSelector(fields.loader)
-    page.waitForFunction(() => !document.querySelector(fields.loader))
+    await page.waitForFunction(() => document.querySelector(fields.loader) == null)
     await scrollToBottom(page)
     await sleep(1000)
   } catch (error) {
@@ -32,8 +34,8 @@ async function scrollAndWait (page: Page) {
 async function getReduxParsedDump (page: Page) {
   try {
     const state = await getReduxDump(page)
-    const tweets = Object.values(state.entities.tweets.entities)
-    const users = state.entities.users.entities
+    const tweets: Tweet[] = Object.values(state.entities.tweets.entities)
+    const users: TwitterUser[] = state.entities.users.entities
     return { tweets, users }
   } catch (error) {
     console.log('Error in getReduxTweetsDump')
@@ -46,12 +48,13 @@ export async function flowFetchLikedTweets (page: Page) {
     await page.goto('https://twitter.com/hackerhgl/likes', { waitUntil: 'networkidle2' })
     await page.waitForSelector(fields.tweet.base)
 
-    let tweets = []
+    let tweets: Tweet[] = []
     const repeatAmount = 5
     let repeated = 0
 
     while (true) {
       const data = await getReduxParsedDump(page)
+      if (!data?.tweets?.length) break
       console.log('while loop | data', data.tweets.length, 'tweets:', tweets.length)
       if (data.tweets.length === tweets.length && repeated < repeatAmount) {
         repeated++

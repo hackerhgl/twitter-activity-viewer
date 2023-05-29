@@ -7,6 +7,9 @@ type TweetIndex = Record<string, string[]>
 function main () {
   try {
     const tweets = loadJsonFile<Tweet[]>('tweets')
+    if (!tweets) {
+      throw new Error('No tweets found')
+    }
     const index: TweetIndex = {}
     tweets.forEach((tweet) => {
       const { user, id_str: id } = tweet

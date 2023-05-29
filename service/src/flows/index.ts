@@ -1,8 +1,8 @@
-import { flowLogin } from './login'
 import puppeteer from 'puppeteer'
+import { flowLogin } from './login'
 import { flowFetchLikedTweets } from './liked_tweets'
 
-async function main () {
+async function main (): Promise<void> {
   try {
     const browser = await puppeteer.launch({ headless: false, args: ['--no-sandbox'], userDataDir: './twitter', defaultViewport: null })
     // const browser = await puppeteer.launch({ headless: false, timeout, args: ['--no-sandbox'] });
@@ -10,8 +10,7 @@ async function main () {
     page.setDefaultNavigationTimeout(0)
     page.setDefaultTimeout(0)
     await page.goto('https://twitter.com/login', { waitUntil: 'networkidle2' })
-    const url = await page.url()
-
+    const url = page.url()
     if (!url.includes('home')) {
       await flowLogin(page)
     }
