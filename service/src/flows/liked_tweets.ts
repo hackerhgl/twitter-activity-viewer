@@ -1,4 +1,3 @@
-import * as path from 'path';
 import { fields } from 'static/fields';
 import { sleep, writeJsonFile } from 'utils';
 import { getReduxDump } from 'utils/puppeteer';
@@ -21,10 +20,8 @@ async function scrollToBottom(page: Page) {
 async function scrollAndWait(page: Page) {
     try {
         await scrollToBottom(page);
-        await page.waitForSelector(fields.loader);
-        await page.waitForFunction(
-            () => document.querySelector(fields.loader) == null,
-        );
+        // await page.waitForSelector(fields.loader);
+        await page.waitForNetworkIdle(); // Experimental
         await scrollToBottom(page);
         await sleep(1000);
     } catch (error) {
@@ -58,37 +55,34 @@ export async function flowFetchLikedTweets(page: Page) {
 
         while (true) {
             console.log('while loop | repeated', repeated);
-
             const data = await getReduxParsedDump(page);
             if (!data?.tweets?.length) break;
+            const isEqualTweets = data.tweets.length === tweets.length;
             console.log(
                 'while loop | data',
                 data.tweets.length,
                 'tweets:',
                 tweets.length,
             );
-            if (
-                data.tweets.length === tweets.length &&
-                repeated < repeatAmount
-            ) {
+            if (isEqualTweets && repeated < repeatAmount) {
                 repeated++;
-                continue;
             }
-            if (
-                data.tweets.length === tweets.length &&
-                repeated >= repeatAmount
-            ) {
+            if (!isEqualTweets) {
+                repeated = 0;
+            }
+            // If the tweets are the same and we have repeated the same amount of times, we can break the loop
+            if (isEqualTweets && repeated >= repeatAmount) {
                 break;
             }
-            repeated = 0;
             tweets = [...data.tweets];
-            console.log('pre-scroll');
             await scrollAndWait(page);
-            console.log('post-scroll');
 
             writeJsonFile('users', JSON.stringify(data.users, null, 2));
             writeJsonFile('tweets', JSON.stringify(tweets, null, 2));
         }
+        console.log('while loop | done');
+        await page.close();
+        process.exit(0);
     } catch (e) {
         console.log('Error in likedTweets');
         console.log(e);
