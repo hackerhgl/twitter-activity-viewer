@@ -14,7 +14,7 @@ async function main(): Promise<void> {
         const page = await browser.newPage();
         page.setDefaultNavigationTimeout(0);
         page.setDefaultTimeout(0);
-        await page.goto('https://twitter.com/i/flow/login', {
+        await page.goto('https://twitter.com/login', {
             waitUntil: 'networkidle2',
         });
         const url = page.url();

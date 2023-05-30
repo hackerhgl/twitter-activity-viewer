@@ -57,6 +57,8 @@ export async function flowFetchLikedTweets(page: Page) {
         let repeated = 0;
 
         while (true) {
+            console.log('while loop | repeated', repeated);
+
             const data = await getReduxParsedDump(page);
             if (!data?.tweets?.length) break;
             console.log(
@@ -80,7 +82,10 @@ export async function flowFetchLikedTweets(page: Page) {
             }
             repeated = 0;
             tweets = [...data.tweets];
+            console.log('pre-scroll');
             await scrollAndWait(page);
+            console.log('post-scroll');
+
             writeJsonFile('users', JSON.stringify(data.users, null, 2));
             writeJsonFile('tweets', JSON.stringify(tweets, null, 2));
         }

@@ -1,7 +1,7 @@
 import { auth } from 'configs/creds';
 import { type Page } from 'puppeteer';
 import { fields } from 'static/fields';
-import { clickButton, loader } from 'utils/puppeteer';
+import { clickButton } from 'utils/puppeteer';
 const options = { timeout: 2000 };
 
 export async function flowLogin(page: Page) {
@@ -28,6 +28,8 @@ export async function flowLogin(page: Page) {
 
     await clickButton(page, 'log in');
     await page.waitForNetworkIdle();
+
+    // Here we check for additional blocker modal that checks for already logged in account
     await alreadyLoggedInModal(page);
 }
 
