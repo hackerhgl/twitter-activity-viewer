@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node index.js",
+    "start": "ts-node src/flows/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ts": "ts-node src/index.ts",
+    "ts": "ts-node src/flows/index.ts",
     "index:tweets": "ts-node src/scripts/index_tweets.ts",
     "dump": "ts-node src/scripts/dump.ts",
     "bundle": "ts-node src/scripts/bundle.ts",

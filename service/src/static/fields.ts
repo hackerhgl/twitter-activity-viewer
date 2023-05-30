@@ -1,8 +1,10 @@
 export const fields = {
     homeBase:
         'div[data-testid="primaryColumn"] div[aria-label="Home timeline"]',
-    email: 'input[autocomplete="username"]',
+    username: 'input[autocomplete="username"]',
+    // email: 'input[autocomplete="email"]',
     text: 'input[name="text"]',
+    value: (val: string) => `input[value="${val}"]`,
     password: 'input[autocomplete="current-password"]',
     tweet: {
         base: 'div[data-testid="cellInnerDiv"] div div article[role="article"]',

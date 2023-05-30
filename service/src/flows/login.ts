@@ -4,7 +4,7 @@ import { fields } from 'static/fields';
 import { clickButton, loader } from 'utils/puppeteer';
 
 export async function flowLogin(page: Page) {
-    const email = await page.waitForSelector(fields.email);
+    const email = await page.waitForSelector(fields.username);
     if (!email) {
         throw new Error('No email field found');
     }
@@ -15,25 +15,9 @@ export async function flowLogin(page: Page) {
     await page.waitForNetworkIdle();
     console.log('LOGIN: ', 'POST-loader');
 
-    // const url = await page.url();
-
-    const text = await page.waitForSelector(fields.text);
-    if (!text) {
-        throw new Error('No text field found');
-    }
-    const valueCheck = await text.evaluate((el) => el.getAttribute('value'));
-    console.log('LOGIN: ', 'TEXT load post: ', text, valueCheck);
-
-    if (!valueCheck) {
-        const username = await page.waitForSelector(fields.text);
-        if (!username) {
-            throw new Error('No username field found');
-        }
-        await username.type(auth.username);
-
-        await clickButton(page, 'next');
-        await page.waitForNetworkIdle();
-    }
+    // Here we check for additional security check for username verification
+    // Sometimes Twitter will ask for a username to verify the account as additional layer to prevent bots, lol.
+    await userNameVerificationCheck(page);
 
     const password = await page.waitForSelector(fields.password);
     if (!password) {
@@ -43,4 +27,36 @@ export async function flowLogin(page: Page) {
 
     await clickButton(page, 'log in');
     await loader(page);
+}
+
+async function userNameVerificationCheck(page: Page) {
+    const options = { timeout: 2000 };
+    try {
+        const text = await page.waitForSelector(fields.text, options);
+        if (!text) {
+            throw new Error('No text field found');
+        }
+        console.log('POST TEXT');
+
+        // Here we get the value of the text field
+        const valueCheck = await text.evaluate(
+            (el) => el.getAttribute('value'),
+            options,
+        );
+        console.log('LOGIN: ', 'TEXT load post: ', text, valueCheck);
+        // If the value of the text field is not the username, we need to enter it
+        if (!valueCheck) {
+            const username = await page.waitForSelector(fields.text, options);
+            if (!username) {
+                throw new Error('No username field found');
+            }
+            await username.type(auth.username);
+
+            await clickButton(page, 'next');
+            await page.waitForNetworkIdle();
+        }
+    } catch (error) {
+        console.log('Username verification not found');
+        console.log(error);
+    }
 }
