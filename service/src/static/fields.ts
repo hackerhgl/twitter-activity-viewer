@@ -6,6 +6,10 @@ export const fields = {
     text: 'input[name="text"]',
     value: (val: string) => `input[value="${val}"]`,
     password: 'input[autocomplete="current-password"]',
+    modal: {
+        alreadyLoggedIn:
+            'div[data-testid="confirmationSheetDialog"] span[id="modal-header"]',
+    },
     tweet: {
         base: 'div[data-testid="cellInnerDiv"] div div article[role="article"]',
         root: 'div[data-testid="cellInnerDiv"]',

@@ -2,6 +2,7 @@ import { auth } from 'configs/creds';
 import { type Page } from 'puppeteer';
 import { fields } from 'static/fields';
 import { clickButton, loader } from 'utils/puppeteer';
+const options = { timeout: 2000 };
 
 export async function flowLogin(page: Page) {
     const email = await page.waitForSelector(fields.username);
@@ -26,11 +27,11 @@ export async function flowLogin(page: Page) {
     await password.type(auth.password);
 
     await clickButton(page, 'log in');
-    await loader(page);
+    await page.waitForNetworkIdle();
+    await alreadyLoggedInModal(page);
 }
 
 async function userNameVerificationCheck(page: Page) {
-    const options = { timeout: 2000 };
     try {
         const text = await page.waitForSelector(fields.text, options);
         if (!text) {
@@ -57,6 +58,34 @@ async function userNameVerificationCheck(page: Page) {
         }
     } catch (error) {
         console.log('Username verification not found');
+        console.log(error);
+    }
+}
+
+async function alreadyLoggedInModal(page: Page) {
+    console.log('async function alreadyLoggedInModal(page: Page) {');
+
+    try {
+        const text =
+            'The account being added is already logged in.'.toLowerCase();
+        const modal = await page.waitForSelector(
+            fields.modal.alreadyLoggedIn,
+            options,
+        );
+        console.log('modal: ', 'pre modal');
+
+        if (modal) {
+            const modalHeading = await modal.evaluate((el: HTMLElement) =>
+                el.innerText?.toLowerCase(),
+            );
+
+            if (modalHeading === text) {
+                await clickButton(page, 'next');
+                await page.waitForNetworkIdle();
+            }
+        }
+    } catch (error) {
+        console.log('already logged in modal not founds');
         console.log(error);
     }
 }

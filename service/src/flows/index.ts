@@ -7,7 +7,7 @@ async function main(): Promise<void> {
         const browser = await puppeteer.launch({
             headless: false,
             args: ['--no-sandbox'],
-            // userDataDir: './tmp/twitter',
+            userDataDir: './tmp/twitter',
             defaultViewport: null,
         });
         // const browser = await puppeteer.launch({ headless: false, timeout, args: ['--no-sandbox'] });
@@ -21,7 +21,7 @@ async function main(): Promise<void> {
         if (!url.includes('home')) {
             await flowLogin(page);
         }
-        // await flowFetchLikedTweets(page);
+        await flowFetchLikedTweets(page);
     } catch (error) {
         console.log('Error in main');
         console.log(error);
